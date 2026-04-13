@@ -26,7 +26,12 @@ description: "Search and browse the item-tickets API index (702 endpoints). Use 
 
 Sources（5 个来源）：`customer`, `iam`, `open`, `staff`, `tenant`
 
-INDEX.txt 每行格式：`METHOD PATH | summary | [source] tag`
+INDEX.txt 每行格式：`METHOD PATH | summary | cn_summary | [source] tag_cn`
+
+- `cn_summary`：中文操作摘要（如"创建 部门"、"分页查询 工单"）
+- `tag_cn`：中文分类标签（如"部门管理"、"工单管理"）
+
+支持中英文搜索，例如搜"创建部门"或"create department"都能命中。
 
 ## 工作流
 
@@ -36,6 +41,18 @@ INDEX.txt 每行格式：`METHOD PATH | summary | [source] tag`
 
 ```bash
 grep -i "ticket" .claude/skills/api-search/apis/INDEX.txt
+```
+
+支持中文搜索：
+```bash
+# 搜中文关键词
+grep "创建.*部门\|部门.*创建" .claude/skills/api-search/apis/INDEX.txt
+
+# 搜中文操作动词
+grep "分页查询" .claude/skills/api-search/apis/INDEX.txt
+
+# 搜中文分类
+grep "部门管理" .claude/skills/api-search/apis/INDEX.txt
 ```
 
 可组合过滤：
