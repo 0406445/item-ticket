@@ -1,0 +1,702 @@
+POST   /v1/customer/customer-organizations/options/batch  |  Get customer organization options by IDs  |  [customer] Customer Options
+POST   /v1/customer/customers/options/batch  |  Get customer options by IDs  |  [customer] Customer Options
+POST   /v1/customer/departments/options/batch  |  Get department options by IDs  |  [customer] Customer Options
+POST   /v1/customer/staff/options/batch  |  Get staff options by IDs  |  [customer] Customer Options
+POST   /v1/customer/teams/options/batch  |  Get team options by IDs  |  [customer] Customer Options
+POST   /v1/customer/ticket/priorities/options/batch  |  Get ticket priority options by IDs  |  [customer] Customer Options
+POST   /v1/customer/topics/options/batch  |  Get topic options by IDs  |  [customer] Customer Options
+GET    /v1/customer/profile  |  Get customer profile  |  [customer] Customer Profile Management
+GET    /v1/customer/tickets/brief/{id}  |  Get ticket brief information  |  [customer] Customer Ticket Management
+GET    /v1/customer/tickets/number/{code}  |  Get ticket detail by number  |  [customer] Customer Ticket Management
+POST   /v1/customer/tickets/number/{ticketNumber}/timeline  |  Get ticket timeline by number  |  [customer] Customer Ticket Management
+POST   /v1/customer/tickets/page  |  Query customer tickets with pagination  |  [customer] Customer Ticket Management
+GET    /v1/customer/tickets/statistics  |  Get ticket statistics  |  [customer] Customer Ticket Management
+POST   /v1/customer/tickets/statistics/ai-summary  |  Generate AI summary from statistics  |  [customer] Customer Ticket Management
+GET    /v1/customer/tickets/{id}  |  Get ticket detail by ID  |  [customer] Customer Ticket Management
+GET    /v1/customer/tickets/{ticketId}/form-entries/{topicId}  |  Get ticket form entries  |  [customer] Customer Ticket Management
+POST   /v1/customer/tickets/{ticketId}/timeline  |  Get ticket timeline by ID  |  [customer] Customer Ticket Management
+GET    /v1/customer/websocket/stats  |  Get basic WebSocket stats  |  [customer] Customer WebSocket
+GET    /v1/customer/auth/current  |  -  |  [customer] customer-auth-controller
+PUT    /v1/customer/auth/language  |  -  |  [customer] customer-auth-controller
+POST   /v1/customer/auth/login  |  -  |  [customer] customer-auth-controller
+POST   /v1/customer/auth/login/iam  |  Customer IAM login  |  [customer] customer-auth-controller
+POST   /v1/customer/auth/logout  |  -  |  [customer] customer-auth-controller
+PUT    /v1/customer/auth/password  |  -  |  [customer] customer-auth-controller
+POST   /v1/customer/auth/switch-tenant  |  -  |  [customer] customer-auth-controller
+GET    /v1/customer/auth/tenant  |  -  |  [customer] customer-auth-controller
+GET    /v1/customer/auth/tenants  |  -  |  [customer] customer-auth-controller
+GET    /v1/customer/auth/validate  |  -  |  [customer] customer-auth-controller
+GET    /v1/iam/chat/agent/business-hours  |  Get Business Hours  |  [iam] Chat API
+POST   /v1/iam/chat/session/sync  |  Sync Staff Session Status  |  [iam] Chat API
+POST   /v1/iam/customer-organizations/best-match  |  Get best matching organizations by name  |  [iam] Customer Organization API
+POST   /v1/iam/customer-organizations/page  |  Page customer organizations  |  [iam] Customer Organization API
+POST   /v1/iam/extend/facility/page  |  Page query facilities  |  [iam] Facility API
+GET    /v1/iam/extend/facility/{id}  |  Get facility by ID  |  [iam] Facility API
+POST   /v1/iam/dashboard/staff/department-count  |  Get staff counts by department  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/activity-stats  |  Get ticket activity statistics by department  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/average-resolution-time  |  Get average resolution time statistics by department  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/count-stats  |  Get comprehensive ticket count statistics  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/department-count  |  Get ticket counts by department  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/organization/average-resolution-time  |  Get average resolution time statistics by organization   |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/sla-achieved  |  Get SLA achievement statistics by department  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/topic-count  |  Get ticket counts by topic  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/dashboard/ticket/trend  |  Get ticket count trend over time  |  [iam] IAM Staff Dashboard
+POST   /v1/iam/report/extend/data-entry  |  Get data entry report with configurable field aggregations  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/extend/data-entry/export  |  Export data entry report to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/staff/work-status  |  Get staff work status data  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/staff/work-status/export  |  Export staff work status data to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/activity  |  Get ticket activity statistics  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/activity/export  |  Export ticket activity statistics to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/sla  |  Get ticket SLA and AHT statistics  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/sla/export  |  Export ticket SLA and AHT statistics to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/sla/new  |  Get new ticket SLA and AHT statistics  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/sla/new/export  |  Export new ticket SLA and AHT statistics to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/status  |  Get ticket status statistics  |  [iam] Staff Ticket Report
+POST   /v1/iam/report/ticket/status/export  |  Export ticket status statistics to Excel  |  [iam] Staff Ticket Report
+POST   /v1/iam/tickets  |  Create a ticket  |  [iam] Ticket API
+GET    /v1/iam/tickets/brief/{id}  |  Get ticket brief info  |  [iam] Ticket API
+POST   /v1/iam/tickets/filter/{ticketId}  |  Handler Ticket Filter  |  [iam] Ticket API
+POST   /v1/iam/tickets/list-with-first-message  |  List tickets with first message  |  [iam] Ticket API
+POST   /v1/iam/tickets/messages  |  Page messages  |  [iam] Ticket API
+POST   /v1/iam/tickets/page  |  Page tickets  |  [iam] Ticket API
+POST   /v1/iam/tickets/search  |  Search tickets  |  [iam] Ticket API
+PUT    /v1/iam/tickets/{id}  |  Partial update a ticket  |  [iam] Ticket API
+POST   /v1/iam/tickets/{id}/messages  |  Page ticket messages  |  [iam] Ticket API
+POST   /v1/iam/tickets/{id}/reply  |  Reply to a ticket  |  [iam] Ticket API
+GET    /v1/iam/tickets/{ticketId}/form-entries  |  Get ticket form entries  |  [iam] Ticket API
+PUT    /v1/iam/tickets/{ticketId}/form-entries  |  Update ticket form entries  |  [iam] Ticket API
+POST   /v1/iam/extend/roster/guessing  |  -  |  [iam] iam-extend-roster-controller
+POST   /v1/iam/extend/roster/page  |  -  |  [iam] iam-extend-roster-controller
+GET    /v1/iam/extend/roster/{id}  |  -  |  [iam] iam-extend-roster-controller
+POST   /v1/open/attachments  |  -  |  [open] Attachment API
+POST   /v1/open/attachments/images  |  Upload image attachment  |  [open] Attachment API
+POST   /v1/open/departments/options/batch  |  -  |  [open] Department API
+POST   /v1/open/departments/page  |  -  |  [open] Department API
+GET    /v1/open/departments/{id}/schedule  |  -  |  [open] Department API
+GET    /v1/open/enums  |  Get all enums  |  [open] Enum Management
+GET    /v1/open/files/{fileId}  |  -  |  [open] File API
+GET    /v1/open/forms/topic/{topicId}  |  -  |  [open] Form API
+POST   /v1/open/hrm-sync/test  |  Test HRM employee sync (Local Only)  |  [open] HRM Test
+POST   /v1/open/hrm-sync/test-create-teams  |  Test Team creation workflow (Local Only)  |  [open] HRM Test
+POST   /v1/open/customers/password/reset  |  Request password reset  |  [open] Open Customer APIs
+POST   /v1/open/customer-organizations/page  |  Query customer organizations with pagination  |  [open] Open Customer Organization APIs
+GET    /v1/open/customer-organizations/{id}  |  Get customer organization by ID  |  [open] Open Customer Organization APIs
+GET    /v1/open/tenants/{id}  |  Get tenant by ID  |  [open] Open Tenant API
+GET    /v1/open/surveys/{token}  |  -  |  [open] Survey API
+POST   /v1/open/surveys/{token}/rating  |  -  |  [open] Survey API
+POST   /v1/open/tickets  |  -  |  [open] Ticket API
+POST   /v1/open/tickets/link  |  -  |  [open] Ticket API
+GET    /v1/open/tickets/number/{ticketNumber}  |  -  |  [open] Ticket API
+POST   /v1/open/tickets/number/{ticketNumber}/timeline  |  -  |  [open] Ticket API
+POST   /v1/open/ticket/display-statuses/options/batch  |  Get display status options by IDs  |  [open] Ticket Display Status API
+POST   /v1/open/ticket/display-statuses/page  |  Query ticket display statuses with pagination  |  [open] Ticket Display Status API
+POST   /v1/open/ticket/priorities/options/batch  |  Get priority options by IDs  |  [open] Ticket Priority API
+POST   /v1/open/ticket/priorities/page  |  Query ticket priorities with pagination  |  [open] Ticket Priority API
+POST   /v1/open/topics/options/batch  |  -  |  [open] Topic API
+POST   /v1/open/topics/page  |  -  |  [open] Topic API
+GET    /v1/open/configs/system  |  -  |  [open] open-config-controller
+GET    /v1/open/test  |  -  |  [open] test-controller
+POST   /v1/open/test/activity  |  -  |  [open] test-controller
+GET    /v1/open/test/agent/business-hours  |  -  |  [open] test-controller
+POST   /v1/open/test/extend/data-entry  |  -  |  [open] test-controller
+GET    /v1/open/test/form-entries  |  -  |  [open] test-controller
+POST   /v1/open/test/notification/publish/in-app  |  -  |  [open] test-controller
+POST   /v1/open/test/notification/publish/system  |  -  |  [open] test-controller
+POST   /v1/open/test/search  |  -  |  [open] test-controller
+POST   /v1/open/test/sla-aht  |  -  |  [open] test-controller
+POST   /v1/open/test/staff-work-status  |  -  |  [open] test-controller
+POST   /v1/open/test/staff/productive/report  |  -  |  [open] test-controller
+POST   /v1/open/test/status  |  -  |  [open] test-controller
+GET    /v1/open/test/survey/send  |  Test survey email send  |  [open] test-controller
+GET    /v1/open/test/ticket/count  |  -  |  [open] test-controller
+POST   /v1/open/test/ticket/number/{ticketNumber}/simulate-email  |  -  |  [open] test-controller
+POST   /v1/open/test/ticket/{ticketId}/simulate-email  |  -  |  [open] test-controller
+GET    /v1/open/test/websocket/stats  |  Get WebSocket statistics  |  [open] test-controller
+POST   /v1/open/test/workflow/start  |  -  |  [open] test-controller
+POST   /v1/open/test/{ticketId}/print  |  -  |  [open] test-controller
+POST   /v1/staff/ai/agents  |  Create AI agent  |  [staff] AI Agent Management
+GET    /v1/staff/ai/agents/built-in-tools  |  Get built-in tools  |  [staff] AI Agent Management
+GET    /v1/staff/ai/agents/llm-info  |  Get LLM information  |  [staff] AI Agent Management
+POST   /v1/staff/ai/agents/options/batch  |  Get AI agent options by IDs  |  [staff] AI Agent Management
+POST   /v1/staff/ai/agents/page  |  Page query AI agents  |  [staff] AI Agent Management
+GET    /v1/staff/ai/agents/{id}  |  Get AI agent by ID  |  [staff] AI Agent Management
+PUT    /v1/staff/ai/agents/{id}  |  Update AI agent  |  [staff] AI Agent Management
+DELETE /v1/staff/ai-assistant/departments/{departmentId}/assistant-agent  |  Unbind assistant agent  |  [staff] AI Assistant Agent Department Binding
+PUT    /v1/staff/ai-assistant/departments/{departmentId}/assistant-agent  |  Bind assistant agent  |  [staff] AI Assistant Agent Department Binding
+GET    /v1/staff/ai-assistant/agents  |  List assistant agents  |  [staff] AI Assistant Agent Registry
+POST   /v1/staff/ai-assistant/agents  |  Create assistant agent  |  [staff] AI Assistant Agent Registry
+POST   /v1/staff/ai-assistant/agents/validate  |  Validate assistant agent baseUrl  |  [staff] AI Assistant Agent Registry
+DELETE /v1/staff/ai-assistant/agents/{code}  |  Delete assistant agent  |  [staff] AI Assistant Agent Registry
+PUT    /v1/staff/ai-assistant/agents/{code}  |  Update assistant agent  |  [staff] AI Assistant Agent Registry
+POST   /v1/staff/ai-dashboard/accuracy-trend  |  Get AI accuracy trend over time  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/agent-stats  |  Get AI Agent statistics  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/ai-coverage-trend  |  Get AI coverage trend over time  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/assistant-stats  |  Get AI Assistant statistics  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/involved-tickets-trend  |  Get involved tickets trend over time  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/message-processes/page  |  -  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/metrics/summary  |  Query metrics summary  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/metrics/time-series  |  Query metrics time series  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/overview  |  Get AI Dashboard overview statistics  |  [staff] AI Dashboard
+POST   /v1/staff/ai-dashboard/stats  |  Get AI Dashboard statistics  |  [staff] AI Dashboard
+POST   /v1/staff/api-keys  |  Create API key  |  [staff] API Key Management
+POST   /v1/staff/api-keys/page  |  Page query API keys  |  [staff] API Key Management
+DELETE /v1/staff/api-keys/{id}  |  Delete API key  |  [staff] API Key Management
+GET    /v1/staff/api-keys/{id}  |  Get API key by ID  |  [staff] API Key Management
+PUT    /v1/staff/api-keys/{id}  |  Update API key  |  [staff] API Key Management
+POST   /v1/staff/attachment-index/add-tag  |  AI auto-tag attachments  |  [staff] Attachment Index and Document Management Center
+POST   /v1/staff/attachment-index/export  |  Export attachment index to Excel  |  [staff] Attachment Index and Document Management Center
+POST   /v1/staff/attachment-index/page  |  Page query attachment index  |  [staff] Attachment Index and Document Management Center
+POST   /v1/staff/attachment-index/updateAttachment  |  updateAttachment  |  [staff] Attachment Index and Document Management Center
+GET    /v1/staff/attachment-index/{attachmentId}  |  Get attachment detail  |  [staff] Attachment Index and Document Management Center
+POST   /v1/staff/admin/attendance-records  |  手动创建考勤记录  |  [staff] Attendance Admin
+POST   /v1/staff/audit-logs/page  |  Query audit logs with pagination  |  [staff] Audit Logs
+POST   /v1/staff/audit-logs/scan  |  Scan audit annotations  |  [staff] Audit Logs
+POST   /v1/staff/auto-assign/history/page  |  Get auto assign history  |  [staff] Auto Assign Rule
+POST   /v1/staff/auto-assign/rule  |  Create a auto assign rule  |  [staff] Auto Assign Rule
+PUT    /v1/staff/auto-assign/rule  |  Update a auto assign rule  |  [staff] Auto Assign Rule
+POST   /v1/staff/auto-assign/rule/page  |  Page query auto assign rules  |  [staff] Auto Assign Rule
+PUT    /v1/staff/auto-assign/rule/status  |  Update auto assign rule status only  |  [staff] Auto Assign Rule
+DELETE /v1/staff/auto-assign/rule/{id}  |  Delete a auto assign rule  |  [staff] Auto Assign Rule
+POST   /v1/staff/auto-assign/workload/page  |  Query staff workload  |  [staff] Auto Assign Rule
+GET    /v1/staff/csv-test/check-header-mapping  |  检查表头映射  |  [staff] CSV测试
+GET    /v1/staff/csv-test/parse-first-record  |  测试第一条记录解析  |  [staff] CSV测试
+GET    /v1/staff/csv-test/parse-headers  |  测试CSV表头解析  |  [staff] CSV测试
+GET    /v1/staff/session-staff/active  |  Get active sessions  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/assign  |  Assign session  |  [staff] Chat Session Management
+GET    /v1/staff/session-staff/chat/token  |  Get chat platform token  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/close  |  Close chat session  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/history/page  |  Page query session history  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/page  |  Page query sessions  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/start  |  Start chat session  |  [staff] Chat Session Management
+POST   /v1/staff/session-staff/upload/file  |  Upload file  |  [staff] Chat Session Management
+GET    /v1/staff/session-staff/{sessionId}  |  Get session by ID  |  [staff] Chat Session Management
+GET    /v1/staff/configs/variables/{type}  |  List template variables  |  [staff] Configuration Management
+GET    /v1/staff/configs/{namespace}  |  List config items  |  [staff] Configuration Management
+PUT    /v1/staff/configs/{namespace}/batch  |  Batch update config items  |  [staff] Configuration Management
+DELETE /v1/staff/configs/{namespace}/{key}  |  Delete config item  |  [staff] Configuration Management
+GET    /v1/staff/configs/{namespace}/{key}  |  Get config item  |  [staff] Configuration Management
+PUT    /v1/staff/configs/{namespace}/{key}  |  Update config item  |  [staff] Configuration Management
+POST   /v1/staff/departments  |  Create department  |  [staff] Department Management
+POST   /v1/staff/departments/options/batch  |  Get department options  |  [staff] Department Management
+POST   /v1/staff/departments/page  |  Query departments  |  [staff] Department Management
+DELETE /v1/staff/departments/{departmentId}/members  |  Remove department members  |  [staff] Department Management
+POST   /v1/staff/departments/{departmentId}/members  |  Add department members  |  [staff] Department Management
+GET    /v1/staff/departments/{id}  |  Get department by ID  |  [staff] Department Management
+PUT    /v1/staff/departments/{id}  |  Update department  |  [staff] Department Management
+POST   /v1/staff/email-banlists  |  Create email banlist entry  |  [staff] Email Banlist Management
+POST   /v1/staff/email-banlists/page  |  Page query email banlist  |  [staff] Email Banlist Management
+DELETE /v1/staff/email-banlists/{id}  |  Delete email banlist entry  |  [staff] Email Banlist Management
+GET    /v1/staff/email-banlists/{id}  |  Get email banlist entry by ID  |  [staff] Email Banlist Management
+PUT    /v1/staff/email-banlists/{id}  |  Update email banlist entry  |  [staff] Email Banlist Management
+POST   /v1/staff/emails  |  Create email configuration  |  [staff] Email Configuration
+POST   /v1/staff/emails/authenticate  |  Authenticate email  |  [staff] Email Configuration
+POST   /v1/staff/emails/options/batch  |  Get email options by IDs  |  [staff] Email Configuration
+POST   /v1/staff/emails/page  |  Page query emails  |  [staff] Email Configuration
+GET    /v1/staff/emails/{id}  |  Get email by ID  |  [staff] Email Configuration
+PUT    /v1/staff/emails/{id}  |  Update email configuration  |  [staff] Email Configuration
+PUT    /v1/staff/form-entries/{id}  |  Update form entry  |  [staff] Form Entry Management
+PUT    /v1/staff/form-entry-values  |  Update form entry value  |  [staff] Form Entry Value Management
+POST   /v1/staff/forms  |  Create form  |  [staff] Form Management
+GET    /v1/staff/forms/field/{fieldId}  |  Get form field  |  [staff] Form Management
+POST   /v1/staff/forms/options/batch  |  Get form options by IDs  |  [staff] Form Management
+POST   /v1/staff/forms/page  |  Page query forms  |  [staff] Form Management
+GET    /v1/staff/forms/topic/{topicId}  |  Get forms by topic  |  [staff] Form Management
+GET    /v1/staff/forms/{id}  |  Get form by ID  |  [staff] Form Management
+PUT    /v1/staff/forms/{id}  |  Update form  |  [staff] Form Management
+POST   /v1/staff/hr-org-managers  |  Create organization manager  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/active-relation  |  Get active manager relation  |  [staff] HR Organization Managers
+POST   /v1/staff/hr-org-managers/batch  |  Batch create or update managers  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/check-exists  |  Check manager relationship exists  |  [staff] HR Organization Managers
+POST   /v1/staff/hr-org-managers/list  |  List organization managers  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/org-unit/{orgUnitId}  |  Get managers by organization unit  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/org-unit/{orgUnitId}/effective-on  |  Get managers effective on date  |  [staff] HR Organization Managers
+PUT    /v1/staff/hr-org-managers/org-unit/{orgUnitId}/expire-all  |  Expire all managers for organization unit  |  [staff] HR Organization Managers
+POST   /v1/staff/hr-org-managers/page  |  Page query organization managers  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/staff/{staffId}  |  Get managers by staff  |  [staff] HR Organization Managers
+PUT    /v1/staff/hr-org-managers/staff/{staffId}/expire-all  |  Expire all managers for staff  |  [staff] HR Organization Managers
+DELETE /v1/staff/hr-org-managers/{id}  |  Delete organization manager  |  [staff] HR Organization Managers
+GET    /v1/staff/hr-org-managers/{id}  |  Get organization manager by ID  |  [staff] HR Organization Managers
+PUT    /v1/staff/hr-org-managers/{id}  |  Update organization manager  |  [staff] HR Organization Managers
+PUT    /v1/staff/hr-org-managers/{id}/expire  |  Expire organization manager  |  [staff] HR Organization Managers
+POST   /v1/staff/hr-org-units  |  Create organization unit  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/active  |  Get all active organization units  |  [staff] HR Organization Unit Management
+POST   /v1/staff/hr-org-units/by-codes  |  Get organization units by codes  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/check-code  |  Check if code is available  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/check-name  |  Check if name is available  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/count  |  Get organization unit count  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/count/{unitType}  |  Get organization unit count by type  |  [staff] HR Organization Unit Management
+POST   /v1/staff/hr-org-units/descendants  |  Get organizations with descendants  |  [staff] HR Organization Unit Management
+POST   /v1/staff/hr-org-units/options  |  Get organization unit options  |  [staff] HR Organization Unit Management
+POST   /v1/staff/hr-org-units/page  |  Page query organization units  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/parent/{parentId}/children  |  Get children by parent ID  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/roots  |  Get root organization units  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/tree  |  Get organization tree  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/tree/{rootId}  |  Get organization tree from root  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/type/{unitType}  |  Get organization units by type  |  [staff] HR Organization Unit Management
+DELETE /v1/staff/hr-org-units/{id}  |  Delete organization unit  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/{id}  |  Get organization unit detail  |  [staff] HR Organization Unit Management
+PUT    /v1/staff/hr-org-units/{id}  |  Update organization unit  |  [staff] HR Organization Unit Management
+PUT    /v1/staff/hr-org-units/{id}/activate  |  Activate organization unit  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/{id}/ancestors  |  Get ancestors  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/{id}/basic  |  Get organization unit basic info  |  [staff] HR Organization Unit Management
+PUT    /v1/staff/hr-org-units/{id}/deactivate  |  Deactivate organization unit  |  [staff] HR Organization Unit Management
+GET    /v1/staff/hr-org-units/{id}/descendants  |  Get descendants  |  [staff] HR Organization Unit Management
+PUT    /v1/staff/hr-org-units/{id}/move  |  Move organization unit  |  [staff] HR Organization Unit Management
+POST   /v1/staff/admin/hrm-batch-sync/create-teams  |  Create supervisor Teams  |  [staff] HRM Batch Sync
+POST   /v1/staff/admin/hrm-batch-sync/sync  |  Sync HRM employees  |  [staff] HRM Batch Sync
+POST   /v1/staff/admin/hrm-batch-sync/sync-complete  |  Complete supervisor Team sync  |  [staff] HRM Batch Sync
+POST   /v1/staff/admin/hrm-batch-sync/update-hr-department  |  Update employee hrDepartmentId  |  [staff] HRM Batch Sync
+POST   /v1/staff/admin/hrm-batch-sync/update-supervisor-ids  |  Update supervisor IDs  |  [staff] HRM Batch Sync
+POST   /v1/staff/admin/hrm-kafka/pause  |  Pause Kafka consumer  |  [staff] HRM Kafka Control
+POST   /v1/staff/admin/hrm-kafka/reset-offset  |  Reset consumer group offset to beginning  |  [staff] HRM Kafka Control
+POST   /v1/staff/admin/hrm-kafka/resume  |  Resume Kafka consumer  |  [staff] HRM Kafka Control
+GET    /v1/staff/admin/hrm-kafka/status  |  Get Kafka consumer status  |  [staff] HRM Kafka Control
+GET    /v1/staff/admin/kafka/consumers  |  List all Kafka consumers  |  [staff] Kafka Admin
+GET    /v1/staff/admin/kafka/consumers/{containerId}/exists  |  Check if Kafka consumer exists  |  [staff] Kafka Admin
+POST   /v1/staff/admin/kafka/consumers/{containerId}/pause  |  Pause Kafka consumer  |  [staff] Kafka Admin
+POST   /v1/staff/admin/kafka/consumers/{containerId}/reset-offset  |  Reset consumer group offset to beginning  |  [staff] Kafka Admin
+POST   /v1/staff/admin/kafka/consumers/{containerId}/resume  |  Resume Kafka consumer  |  [staff] Kafka Admin
+GET    /v1/staff/admin/kafka/consumers/{containerId}/status  |  Get Kafka consumer status  |  [staff] Kafka Admin
+POST   /v1/staff/leave-balances  |  Create leave balance  |  [staff] Leave Balance Management
+DELETE /v1/staff/leave-balances/batch  |  Batch delete leave balances  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/batch  |  Get leave balances by IDs  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/batch-update  |  Batch update used minutes  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/export  |  Export leave balances to Excel  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/import  |  Import leave balances from Excel  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/import-template  |  Download leave balance import template  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/initialize  |  Initialize staff balances  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/low-balance  |  Get low balance records  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/me/all-types-with-balances/{period}  |  Get all leave types with balances  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/me/period/{period}  |  Get my balances  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/page  |  Page query leave balances  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/release  |  Release leave minutes  |  [staff] Leave Balance Management
+POST   /v1/staff/leave-balances/reserve  |  Reserve leave minutes  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/staff/{staffId}/period/{period}  |  Get balances by staff and period  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/staff/{staffId}/type/{leaveTypeId}/period/{period}  |  Get balance by staff, type and period  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/staff/{staffId}/type/{leaveTypeId}/period/{period}/check  |  Check balance availability  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/staff/{staffId}/type/{leaveTypeId}/period/{period}/remaining  |  Get remaining balance  |  [staff] Leave Balance Management
+DELETE /v1/staff/leave-balances/{id}  |  Delete leave balance  |  [staff] Leave Balance Management
+GET    /v1/staff/leave-balances/{id}  |  Get leave balance  |  [staff] Leave Balance Management
+PUT    /v1/staff/leave-balances/{id}  |  Update leave balance  |  [staff] Leave Balance Management
+POST   /v1/staff/leave/data-fix/execute  |  Fix Historical Leave Data  |  [staff] Leave Data Fix
+GET    /v1/staff/leave/data-fix/preview  |  Preview Leave Data Fix  |  [staff] Leave Data Fix
+POST   /v1/staff/leave/data-fix/recalculate  |  Recalculate All Leave Balances  |  [staff] Leave Data Fix
+GET    /v1/staff/leave/data-fix/recalculate/preview  |  Preview Leave Balance Recalculation  |  [staff] Leave Data Fix
+POST   /v1/staff/leave/migration/execute  |  Execute Leave Migration  |  [staff] Leave Migration Management
+GET    /v1/staff/leave/migration/status  |  Get Migration Status  |  [staff] Leave Migration Management
+GET    /v1/staff/leave/balance  |  查询假期余额  |  [staff] Leave Request Management
+POST   /v1/staff/leave/requests/export  |  导出请假记录  |  [staff] Leave Request Management
+POST   /v1/staff/leave/requests/list  |  列表查询请假记录  |  [staff] Leave Request Management
+POST   /v1/staff/leave/requests/page  |  分页查询请假记录  |  [staff] Leave Request Management
+POST   /v1/staff/leave/requests/preview  |  Preview Leave Impact  |  [staff] Leave Request Management
+GET    /v1/staff/leave/requests/{id}  |  Get Leave Request  |  [staff] Leave Request Management
+GET    /v1/staff/leave/requests/{id}/approval-history  |  获取请假审批历史  |  [staff] Leave Request Management
+PUT    /v1/staff/leave/requests/{id}/cancel  |  撤销请假申请  |  [staff] Leave Request Management
+POST   /v1/staff/leave/revoke/requests  |  Submit leave revoke request  |  [staff] Leave Revoke Request Management
+POST   /v1/staff/leave/revoke/requests/list  |  List leave revoke requests  |  [staff] Leave Revoke Request Management
+POST   /v1/staff/leave/revoke/requests/page  |  Page query leave revoke requests  |  [staff] Leave Revoke Request Management
+GET    /v1/staff/leave/revoke/requests/{id}  |  Get leave revoke request detail  |  [staff] Leave Revoke Request Management
+POST   /v1/staff/leave/revoke/requests/{id}/cancel  |  Cancel leave revoke request  |  [staff] Leave Revoke Request Management
+POST   /v1/staff/leave-types  |  Create leave type  |  [staff] Leave Type Management
+DELETE /v1/staff/leave-types/batch  |  Batch delete leave types  |  [staff] Leave Type Management
+POST   /v1/staff/leave-types/batch  |  Get leave types by IDs  |  [staff] Leave Type Management
+GET    /v1/staff/leave-types/code/{code}  |  Get leave type by code  |  [staff] Leave Type Management
+GET    /v1/staff/leave-types/exists/code/{code}  |  Check code existence  |  [staff] Leave Type Management
+GET    /v1/staff/leave-types/options  |  Get all options  |  [staff] Leave Type Management
+POST   /v1/staff/leave-types/options/batch  |  Get options by IDs  |  [staff] Leave Type Management
+POST   /v1/staff/leave-types/page  |  Page query leave types  |  [staff] Leave Type Management
+DELETE /v1/staff/leave-types/{id}  |  Delete leave type  |  [staff] Leave Type Management
+GET    /v1/staff/leave-types/{id}  |  Get leave type  |  [staff] Leave Type Management
+PUT    /v1/staff/leave-types/{id}  |  Update leave type  |  [staff] Leave Type Management
+POST   /v1/staff/notification/channels  |  Create notification channel  |  [staff] Notification Channel Management
+POST   /v1/staff/notification/channels/options/batch  |  Get notification channel options  |  [staff] Notification Channel Management
+POST   /v1/staff/notification/channels/page  |  Page query notification channels  |  [staff] Notification Channel Management
+DELETE /v1/staff/notification/channels/{id}  |  Delete notification channel  |  [staff] Notification Channel Management
+GET    /v1/staff/notification/channels/{id}  |  Get notification channel by ID  |  [staff] Notification Channel Management
+PUT    /v1/staff/notification/channels/{id}  |  Update notification channel  |  [staff] Notification Channel Management
+POST   /v1/staff/notification/instances/page  |  Page query notification instances  |  [staff] Notification Instance Management
+POST   /v1/staff/notification/instances/personal/page  |  Page query notification instances  |  [staff] Notification Instance Management
+POST   /v1/staff/notification/instances/read/batch  |  Mark multiple as read  |  [staff] Notification Instance Management
+POST   /v1/staff/notification/instances/system/publish  |  Publish system notification  |  [staff] Notification Instance Management
+GET    /v1/staff/notification/instances/unread-counts  |  Get unread notification counts  |  [staff] Notification Instance Management
+DELETE /v1/staff/notification/instances/{id}  |  delete notification  |  [staff] Notification Instance Management
+GET    /v1/staff/notification/instances/{id}  |  Get notification instance by ID  |  [staff] Notification Instance Management
+PUT    /v1/staff/notification/instances/{id}  |  update notification  |  [staff] Notification Instance Management
+POST   /v1/staff/notification/instances/{id}/read  |  Mark as read  |  [staff] Notification Instance Management
+POST   /v1/staff/notification/settings  |  Create notification setting  |  [staff] Notification Setting Management
+POST   /v1/staff/notification/settings/options/batch  |  Get notification setting options  |  [staff] Notification Setting Management
+POST   /v1/staff/notification/settings/page  |  Page query notification settings  |  [staff] Notification Setting Management
+DELETE /v1/staff/notification/settings/{id}  |  Delete notification setting  |  [staff] Notification Setting Management
+GET    /v1/staff/notification/settings/{id}  |  Get notification setting by ID  |  [staff] Notification Setting Management
+PUT    /v1/staff/notification/settings/{id}  |  Update notification setting  |  [staff] Notification Setting Management
+POST   /v1/staff/notification/template-groups  |  Create notification template group  |  [staff] Notification Template Group Management
+POST   /v1/staff/notification/template-groups/batch  |  Get notification template groups by IDs  |  [staff] Notification Template Group Management
+POST   /v1/staff/notification/template-groups/page  |  Page query notification template groups  |  [staff] Notification Template Group Management
+GET    /v1/staff/notification/template-groups/{id}  |  Get notification template group by ID  |  [staff] Notification Template Group Management
+PUT    /v1/staff/notification/template-groups/{id}  |  Update notification template group  |  [staff] Notification Template Group Management
+POST   /v1/staff/notification/templates  |  Create notification template  |  [staff] Notification Template Management
+GET    /v1/staff/notification/templates/{id}  |  Get notification template by ID  |  [staff] Notification Template Management
+PUT    /v1/staff/notification/templates/{id}  |  Update notification template  |  [staff] Notification Template Management
+GET    /v1/staff/overtime/balance  |  查询加班余额  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/batch-delete  |  批量删除加班申请  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/export  |  导出加班申请  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/list  |  列表查询加班申请  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/page  |  分页查询加班申请  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/pending-approval/page  |  查询待审批的加班申请  |  [staff] Overtime Request Management
+GET    /v1/staff/overtime/requests/statistics  |  查询加班统计  |  [staff] Overtime Request Management
+GET    /v1/staff/overtime/requests/{id}  |  查询加班申请详情  |  [staff] Overtime Request Management
+POST   /v1/staff/overtime/requests/{id}/cancel  |  取消加班申请  |  [staff] Overtime Request Management
+POST   /v1/staff/permissions  |  Create permission  |  [staff] Permission Management
+GET    /v1/staff/permissions/tree  |  Get permission tree  |  [staff] Permission Management
+PUT    /v1/staff/permissions/{id}  |  Update permission  |  [staff] Permission Management
+GET    /v1/staff/push-settings  |  Get push setting  |  [staff] Push Setting
+PUT    /v1/staff/push-settings  |  Update push setting  |  [staff] Push Setting
+POST   /v1/staff/push-tokens/register  |  Register push token  |  [staff] Push Token
+POST   /v1/staff/push-tokens/unregister  |  Unregister push token  |  [staff] Push Token
+POST   /v1/staff/roles  |  Create role  |  [staff] Role Management
+POST   /v1/staff/roles/options/batch  |  Get role options by IDs  |  [staff] Role Management
+POST   /v1/staff/roles/page  |  Page query roles  |  [staff] Role Management
+GET    /v1/staff/roles/{id}  |  Get role by ID  |  [staff] Role Management
+PUT    /v1/staff/roles/{id}  |  Update role  |  [staff] Role Management
+POST   /v1/staff/slas  |  Create SLA  |  [staff] SLA Management
+POST   /v1/staff/slas/options/batch  |  Get options by ids  |  [staff] SLA Management
+POST   /v1/staff/slas/page  |  Page query SLAs  |  [staff] SLA Management
+GET    /v1/staff/slas/{id}  |  Get SLA  |  [staff] SLA Management
+PUT    /v1/staff/slas/{id}  |  Update SLA  |  [staff] SLA Management
+GET    /v1/staff/schedules/{scheduleId}/entries  |  Get schedule entries  |  [staff] Schedule Entry Management
+POST   /v1/staff/schedules/{scheduleId}/entries  |  Create schedule entry  |  [staff] Schedule Entry Management
+DELETE /v1/staff/schedules/{scheduleId}/entries/{id}  |  Delete schedule entry  |  [staff] Schedule Entry Management
+PUT    /v1/staff/schedules/{scheduleId}/entries/{id}  |  Update schedule entry  |  [staff] Schedule Entry Management
+POST   /v1/staff/schedules  |  Create schedule  |  [staff] Schedule Management
+POST   /v1/staff/schedules/apply  |  Apply schedule  |  [staff] Schedule Management
+POST   /v1/staff/schedules/apply/preview  |  Preview schedule apply  |  [staff] Schedule Management
+POST   /v1/staff/schedules/options/batch  |  Get options by ids  |  [staff] Schedule Management
+POST   /v1/staff/schedules/page  |  Page query schedules  |  [staff] Schedule Management
+GET    /v1/staff/schedules/type/{type}  |  Get schedules by type  |  [staff] Schedule Management
+GET    /v1/staff/schedules/{id}  |  Get schedule  |  [staff] Schedule Management
+PUT    /v1/staff/schedules/{id}  |  Update schedule  |  [staff] Schedule Management
+POST   /v1/staff/shift-auto-publish/manual  |  Manual Auto Publish Shifts  |  [staff] Shift Auto Publish Management
+DELETE /v1/staff/shift-bidding  |  Delete unbid shifts  |  [staff] Shift Bidding
+GET    /v1/staff/shift-bidding  |  Query shift bidding calendar  |  [staff] Shift Bidding
+POST   /v1/staff/shift-bidding/bid  |  Bid for a shift by time slot  |  [staff] Shift Bidding
+POST   /v1/staff/shift-instances  |  Create Shift Instance  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/batch-delete  |  Batch Delete by Conditions  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/batch-delete-selected  |  Batch Delete Selected  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/batch-publish  |  Batch Publish by Conditions  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/batch-revert-to-draft  |  Batch Revert to Draft by Conditions (Admin Only)  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/page  |  Page Query Shift Instances  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/publish  |  Publish Shifts  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/unpublish  |  Unpublish Shifts  |  [staff] Shift Instance Management
+POST   /v1/staff/shift-instances/update-for-leave  |  Update Shift Instances for Leave  |  [staff] Shift Instance Management
+DELETE /v1/staff/shift-instances/{id}  |  Delete Shift Instance  |  [staff] Shift Instance Management
+GET    /v1/staff/shift-instances/{id}  |  Get Shift Instance  |  [staff] Shift Instance Management
+PUT    /v1/staff/shift-instances/{id}  |  Update Shift Instance  |  [staff] Shift Instance Management
+POST   /v1/staff/attendance-confirmations/clock-out  |  Clock Out并填写午餐和休息时间  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/confirm  |  确认考勤 (Agree操作)  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/dispute  |  提交考勤异议 (Reject操作)  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/disputes/export  |  导出考勤异议记录  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/disputes/page  |  分页查询所有考勤异议（后台管理）  |  [staff] Staff Attendance Confirmations
+GET    /v1/staff/attendance-confirmations/disputes/pending  |  查询待审批的考勤异议 (Team Leader)  |  [staff] Staff Attendance Confirmations
+GET    /v1/staff/attendance-confirmations/disputes/{id}  |  获取考勤异议详情  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/disputes/{id}/approve  |  批准考勤异议 (Team Leader)  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/disputes/{id}/reject  |  拒绝考勤异议 (Team Leader)  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-confirmations/disputes/{id}/revise  |  员工修改考勤异议（退回修改后重新提交或撤回）  |  [staff] Staff Attendance Confirmations
+GET    /v1/staff/attendance-confirmations/history  |  查询考勤确认历史  |  [staff] Staff Attendance Confirmations
+GET    /v1/staff/attendance-confirmations/history/all  |  获取所有考勤确认历史  |  [staff] Staff Attendance Confirmations
+GET    /v1/staff/attendance-confirmations/pending  |  获取待确认的每日考勤摘要  |  [staff] Staff Attendance Confirmations
+POST   /v1/staff/attendance-records/batch-push-to-hrm  |  Batch Push Attendance Records to HRM  |  [staff] Staff Attendance Records
+POST   /v1/staff/attendance-records/export  |  导出考勤报表  |  [staff] Staff Attendance Records
+POST   /v1/staff/attendance-records/list  |  List Query Attendance Records  |  [staff] Staff Attendance Records
+POST   /v1/staff/attendance-records/page  |  Page Query Attendance Records  |  [staff] Staff Attendance Records
+POST   /v1/staff/attendance-records/push-to-hrm/{id}  |  Push Attendance Record to HRM  |  [staff] Staff Attendance Records
+PUT    /v1/staff/attendance-records/{id}  |  Update Attendance Record (Admin Only)  |  [staff] Staff Attendance Records
+POST   /v1/staff/attendance-summary  |  Create Attendance Summary  |  [staff] Staff Attendance Summary
+POST   /v1/staff/attendance-summary/generate  |  Generate Attendance Summaries  |  [staff] Staff Attendance Summary
+GET    /v1/staff/attendance-summary/id/{id}  |  Get Attendance Summary by ID  |  [staff] Staff Attendance Summary
+POST   /v1/staff/attendance-summary/page  |  Page Query Attendance Summaries  |  [staff] Staff Attendance Summary
+GET    /v1/staff/attendance-summary/range/{staffId}  |  Get Summaries by Date Range  |  [staff] Staff Attendance Summary
+GET    /v1/staff/attendance-summary/statistics/{staffId}  |  Get Summary Statistics  |  [staff] Staff Attendance Summary
+GET    /v1/staff/attendance-summary/working-hours/{staffId}  |  获取工作时长统计  |  [staff] Staff Attendance Summary
+DELETE /v1/staff/attendance-summary/{id}  |  Delete Attendance Summary  |  [staff] Staff Attendance Summary
+PUT    /v1/staff/attendance-summary/{id}  |  Update Attendance Summary  |  [staff] Staff Attendance Summary
+GET    /v1/staff/auth/current  |  Get current staff  |  [staff] Staff Authentication
+GET    /v1/staff/auth/dummy-email  |  Generate dummy email address  |  [staff] Staff Authentication
+PUT    /v1/staff/auth/language  |  Update language  |  [staff] Staff Authentication
+POST   /v1/staff/auth/login  |  Staff login  |  [staff] Staff Authentication
+POST   /v1/staff/auth/login/iam  |  Staff IAM login  |  [staff] Staff Authentication
+POST   /v1/staff/auth/logout  |  Staff logout  |  [staff] Staff Authentication
+PUT    /v1/staff/auth/password  |  Update password  |  [staff] Staff Authentication
+GET    /v1/staff/auth/signature  |  Get signature  |  [staff] Staff Authentication
+PUT    /v1/staff/auth/signature  |  Update signature  |  [staff] Staff Authentication
+POST   /v1/staff/auth/switch-tenant  |  Switch tenant  |  [staff] Staff Authentication
+GET    /v1/staff/auth/tenant  |  Get current tenant  |  [staff] Staff Authentication
+GET    /v1/staff/auth/tenants  |  Get valid tenant list  |  [staff] Staff Authentication
+PUT    /v1/staff/auth/timezone  |  Update timezone  |  [staff] Staff Authentication
+GET    /v1/staff/auth/validate  |  Validate session token  |  [staff] Staff Authentication
+PUT    /v1/staff/auth/work-status  |  Update staff work status  |  [staff] Staff Authentication
+POST   /v1/staff/dashboard/staff/department-count  |  Get staff counts by department  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/activity-stats  |  Get ticket activity statistics by department  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/average-resolution-time  |  Get average resolution time statistics by department  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/count-stats  |  Get comprehensive ticket count statistics  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/department-count  |  Get ticket counts by department  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/sla-achieved  |  Get SLA achievement statistics by department  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/topic-count  |  Get ticket counts by topic  |  [staff] Staff Dashboard
+POST   /v1/staff/dashboard/ticket/trend  |  Get ticket count trend over time  |  [staff] Staff Dashboard
+DELETE /v1/staff/staff-face/delete/{staffId}  |  Delete Face  |  [staff] Staff Face Management
+POST   /v1/staff/staff-face/page  |  Page Face  |  [staff] Staff Face Management
+POST   /v1/staff/staff-face/register/{staffId}  |  Register Face  |  [staff] Staff Face Management
+PUT    /v1/staff/staff-face/update/{staffId}  |  Update Face  |  [staff] Staff Face Management
+POST   /v1/staff/staff-face/verify/{staffId}  |  Verify Face  |  [staff] Staff Face Management
+GET    /v1/staff/staff-face/{staffId}  |  Get Staff Face  |  [staff] Staff Face Management
+POST   /v1/staff/hrm/attendance/query  |  Query HRM Attendance Records  |  [staff] Staff HRM Attendance
+GET    /v1/staff/hierarchy/tree  |  Get staff hierarchy tree  |  [staff] Staff Hierarchy
+POST   /v1/staff/hierarchy/validate-manager  |  Validate manager assignment  |  [staff] Staff Hierarchy
+GET    /v1/staff/hierarchy/{staffId}/subordinates  |  Get direct subordinates  |  [staff] Staff Hierarchy
+POST   /v1/staff/staff  |  Create staff  |  [staff] Staff Management
+POST   /v1/staff/staff/hr-page  |  Page query staff for HR  |  [staff] Staff Management
+GET    /v1/staff/staff/iam-user/check  |  Check IAM user by email  |  [staff] Staff Management
+POST   /v1/staff/staff/import  |  Import staff from Excel  |  [staff] Staff Management
+POST   /v1/staff/staff/options/batch  |  Get staff options by IDs  |  [staff] Staff Management
+POST   /v1/staff/staff/page  |  Page query staff  |  [staff] Staff Management
+GET    /v1/staff/staff/template  |  Generate staff import template  |  [staff] Staff Management
+GET    /v1/staff/staff/{id}  |  Get staff by ID  |  [staff] Staff Management
+PUT    /v1/staff/staff/{id}  |  Update staff  |  [staff] Staff Management
+PUT    /v1/staff/staff/{id}/password/reset  |  Reset staff password  |  [staff] Staff Management
+POST   /v1/staff/period-work-status  |  Create staff period work status  |  [staff] Staff Period Work Status
+PUT    /v1/staff/period-work-status  |  Update staff period work status  |  [staff] Staff Period Work Status
+POST   /v1/staff/period-work-status/page  |  Page query staff period work status  |  [staff] Staff Period Work Status
+DELETE /v1/staff/period-work-status/{id}  |  Delete staff period work status  |  [staff] Staff Period Work Status
+GET    /v1/staff/period-work-status/{id}  |  Get staff period work status by ID  |  [staff] Staff Period Work Status
+POST   /v1/staff/report/extend/data-entry  |  Get data entry report with configurable field aggregations  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/extend/data-entry/export  |  Export data entry report to Excel  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/staff/work-status  |  Get staff work status data  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/staff/work-status/export  |  Export staff work status data to Excel  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/activity  |  Get ticket activity statistics  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/activity/export  |  Export ticket activity statistics to Excel  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/sla  |  Get ticket SLA and AHT statistics  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/sla/export  |  Export ticket SLA and AHT statistics to Excel  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/sla/new  |  Get new ticket SLA and AHT statistics  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/sla/new/export  |  Export new ticket SLA and AHT statistics to Excel  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/status  |  Get ticket status statistics  |  [staff] Staff Ticket Report
+POST   /v1/staff/report/ticket/status/export  |  Export ticket status statistics to Excel  |  [staff] Staff Ticket Report
+GET    /v1/staff/websocket/stats  |  Get WebSocket statistics  |  [staff] Staff WebSocket
+GET    /v1/staff/attachments  |  -  |  [staff] Storage API
+POST   /v1/staff/attachments  |  -  |  [staff] Storage API
+POST   /v1/staff/attachments/clone  |  -  |  [staff] Storage API
+POST   /v1/staff/attachments/images  |  Upload image attachment  |  [staff] Storage API
+DELETE /v1/staff/attachments/{id}  |  -  |  [staff] Storage API
+GET    /v1/staff/survey/config/rules  |  List Survey Rules  |  [staff] Survey Config
+POST   /v1/staff/survey/config/rules  |  Create Survey Rule  |  [staff] Survey Config
+DELETE /v1/staff/survey/config/rules/{ruleId}  |  Delete Survey Rule  |  [staff] Survey Config
+PUT    /v1/staff/survey/config/rules/{ruleId}  |  Update Survey Rule  |  [staff] Survey Config
+POST   /v1/staff/report/survey/dashboard  |  Get survey dashboard data  |  [staff] Survey Dashboard
+POST   /v1/staff/survey/ratings/page  |  Page query survey ratings overview  |  [staff] Survey Ratings
+GET    /v1/staff/survey/send-logs/debug/{ticketId}/token  |  [DEBUG] Get survey token by ticket ID - LOCAL ENV ONLY  |  [staff] Survey Send Logs
+POST   /v1/staff/survey/send-logs/page  |  Page query survey send logs  |  [staff] Survey Send Logs
+POST   /v1/staff/tags  |  Create a new tag  |  [staff] Tag Management
+POST   /v1/staff/tags/options/batch  |  -  |  [staff] Tag Management
+POST   /v1/staff/tags/page  |  Page query tags  |  [staff] Tag Management
+DELETE /v1/staff/tags/{id}  |  Delete tag by ID  |  [staff] Tag Management
+GET    /v1/staff/tags/{id}  |  Get tag by ID  |  [staff] Tag Management
+PUT    /v1/staff/tags/{id}  |  Update an existing tag  |  [staff] Tag Management
+POST   /v1/staff/teams  |  Create team  |  [staff] Team Management
+POST   /v1/staff/teams/import  |  Import teams from Excel  |  [staff] Team Management
+POST   /v1/staff/teams/options/batch  |  Get team options by IDs  |  [staff] Team Management
+POST   /v1/staff/teams/page  |  Page query teams  |  [staff] Team Management
+GET    /v1/staff/teams/template  |  Generate team import template  |  [staff] Team Management
+GET    /v1/staff/teams/{id}  |  Get team by ID  |  [staff] Team Management
+PUT    /v1/staff/teams/{id}  |  Update team  |  [staff] Team Management
+DELETE /v1/staff/teams/{teamId}/members  |  Remove team members  |  [staff] Team Management
+POST   /v1/staff/teams/{teamId}/members  |  Add team members  |  [staff] Team Management
+POST   /v1/staff/ticket-collaborators/batch-update  |  Batch update ticket collaborators  |  [staff] Ticket Collaborators
+POST   /v1/staff/ticket-collaborators/query  |  Query ticket collaborators  |  [staff] Ticket Collaborators
+POST   /v1/staff/ticket-create-templates  |  Create ticket create template  |  [staff] Ticket Create Template Management
+POST   /v1/staff/ticket-create-templates/list  |  List ticket create templates  |  [staff] Ticket Create Template Management
+POST   /v1/staff/ticket-create-templates/options/batch  |  -  |  [staff] Ticket Create Template Management
+POST   /v1/staff/ticket-create-templates/page  |  Page query ticket create templates  |  [staff] Ticket Create Template Management
+GET    /v1/staff/ticket-create-templates/{id}  |  Get ticket create template by ID  |  [staff] Ticket Create Template Management
+PUT    /v1/staff/ticket-create-templates/{id}  |  Update ticket create template  |  [staff] Ticket Create Template Management
+GET    /v1/staff/ticket/display-status  |  Get display statuses  |  [staff] Ticket Display Status
+POST   /v1/staff/ticket/display-status  |  Create display status  |  [staff] Ticket Display Status
+POST   /v1/staff/ticket/display-status/options/batch  |  Get display status options by IDs  |  [staff] Ticket Display Status
+POST   /v1/staff/ticket/display-status/page  |  Page query display statuses  |  [staff] Ticket Display Status
+GET    /v1/staff/ticket/display-status/{id}  |  Get display status by ID  |  [staff] Ticket Display Status
+PUT    /v1/staff/ticket/display-status/{id}  |  Update display status  |  [staff] Ticket Display Status
+POST   /v1/staff/ticket/filter-group  |  Create a new filter group  |  [staff] Ticket Filter Group Management
+PUT    /v1/staff/ticket/filter-group  |  Update an existing filter group  |  [staff] Ticket Filter Group Management
+POST   /v1/staff/ticket/filter-group/page  |  Page query filter groups  |  [staff] Ticket Filter Group Management
+DELETE /v1/staff/ticket/filter-group/{id}  |  Delete filter group by ID  |  [staff] Ticket Filter Group Management
+GET    /v1/staff/ticket/filter-group/{id}  |  Get filter group by ID  |  [staff] Ticket Filter Group Management
+GET    /v1/staff/ticket/filter-job/running-info  |  Get Running Job Info  |  [staff] Ticket Filter Job
+POST   /v1/staff/ticket/filter-job/start  |  Start Ticket Filter Job  |  [staff] Ticket Filter Job
+POST   /v1/staff/ticket/filter  |  Create a new filter  |  [staff] Ticket Filter Management
+PUT    /v1/staff/ticket/filter  |  Update an existing filter  |  [staff] Ticket Filter Management
+GET    /v1/staff/ticket/filter/fields  |  List all fields that can be used in filters  |  [staff] Ticket Filter Management
+GET    /v1/staff/ticket/filter/group/{groupId}  |  List filters by group ID  |  [staff] Ticket Filter Management
+DELETE /v1/staff/ticket/filter/{id}  |  Delete filter by ID  |  [staff] Ticket Filter Management
+GET    /v1/staff/ticket/filter/{id}  |  Get filter by ID  |  [staff] Ticket Filter Management
+GET    /v1/staff/ticket/macros  |  Query macros  |  [staff] Ticket Macro Management
+POST   /v1/staff/ticket/macros  |  Create macro  |  [staff] Ticket Macro Management
+POST   /v1/staff/ticket/macros/options/batch  |  Get macro options  |  [staff] Ticket Macro Management
+POST   /v1/staff/ticket/macros/page  |  Query macros  |  [staff] Ticket Macro Management
+GET    /v1/staff/ticket/macros/{id}  |  Get macro by ID  |  [staff] Ticket Macro Management
+PUT    /v1/staff/ticket/macros/{id}  |  Update macro  |  [staff] Ticket Macro Management
+POST   /v1/staff/tickets  |  Create ticket  |  [staff] Ticket Management
+GET    /v1/staff/tickets/brief/{id}  |  Get ticket brief info  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/bulk/department  |  Update ticket department assignments in bulk  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/bulk/staff  |  Update ticket staff assignments in bulk  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/bulk/status  |  Update ticket status  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/bulk/team  |  Update ticket team assignments in bulk  |  [staff] Ticket Management
+POST   /v1/staff/tickets/chat-summary  |  Generate chat summary for email  |  [staff] Ticket Management
+POST   /v1/staff/tickets/display-status-logs  |  Query display status logs  |  [staff] Ticket Management
+POST   /v1/staff/tickets/export  |  Export tickets  |  [staff] Ticket Management
+POST   /v1/staff/tickets/exportAuditLog  |  Export audit log  |  [staff] Ticket Management
+POST   /v1/staff/tickets/message-processes/page  |  Query ticket message processes  |  [staff] Ticket Management
+GET    /v1/staff/tickets/message/{ticketMessageId}/email-headers  |  Get email header information for a ticket message  |  [staff] Ticket Management
+GET    /v1/staff/tickets/message/{ticketMessageId}/email-userInfo  |  Get email user info information for a ticket message  |  [staff] Ticket Management
+GET    /v1/staff/tickets/number/{code}  |  Get ticket by number  |  [staff] Ticket Management
+POST   /v1/staff/tickets/number/{ticketNumber}/timeline  |  Get ticket timeline by number  |  [staff] Ticket Management
+POST   /v1/staff/tickets/options/batch  |  Get ticket options by IDs  |  [staff] Ticket Management
+POST   /v1/staff/tickets/page  |  Page query tickets  |  [staff] Ticket Management
+POST   /v1/staff/tickets/reminder  |  Create ticket reminder  |  [staff] Ticket Management
+GET    /v1/staff/tickets/{id}  |  Get ticket by ID  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/{id}  |  Update ticket  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{id}/reply  |  Reply to ticket  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{originalTicketId}/parallel  |  Create parallel ticket  |  [staff] Ticket Management
+DELETE /v1/staff/tickets/{sourceId}/relate/{targetId}  |  Unrelate tickets  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{sourceId}/relate/{targetId}  |  Relate tickets  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{targetId}/merge  |  Merge tickets  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/{ticketId}/department  |  Update ticket department assignments  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/execute-macro/{macroId}  |  Execute macro  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/follow  |  Toggle ticket follow  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/force-open  |  -  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/{ticketId}/form-entries  |  Update ticket form entries  |  [staff] Ticket Management
+GET    /v1/staff/tickets/{ticketId}/form-entries/{topicId}  |  Get ticket form entries  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/handover  |  Hand over ticket  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/messages/{messageId}/answer-status  |  Update answer status  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/{ticketId}/messages/{messageId}/internal-note  |  Update internal note message  |  [staff] Ticket Management
+PUT    /v1/staff/tickets/{ticketId}/messages/{messageId}/scheduled-time  |  Update scheduled send time  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/print  |  Generate ticket print HTML  |  [staff] Ticket Management
+GET    /v1/staff/tickets/{ticketId}/summary  |  Get ticket AI summary  |  [staff] Ticket Management
+POST   /v1/staff/tickets/{ticketId}/timeline  |  Get ticket timeline  |  [staff] Ticket Management
+POST   /v1/staff/ticket/priorities  |  Create a new ticket priority  |  [staff] Ticket Priority
+GET    /v1/staff/ticket/priorities/list  |  Get all enabled ticket priorities  |  [staff] Ticket Priority
+POST   /v1/staff/ticket/priorities/options/batch  |  Get priority options by IDs  |  [staff] Ticket Priority
+POST   /v1/staff/ticket/priorities/page  |  Query ticket priorities with pagination  |  [staff] Ticket Priority
+GET    /v1/staff/ticket/priorities/{id}  |  Get ticket priority details  |  [staff] Ticket Priority
+PUT    /v1/staff/ticket/priorities/{id}  |  Update an existing ticket priority  |  [staff] Ticket Priority
+POST   /v1/staff/tickets/search  |  Search tickets  |  [staff] Ticket Search
+POST   /v1/staff/ticket-views  |  Create ticket view  |  [staff] Ticket View Management
+POST   /v1/staff/ticket-views/favorites  |  List favorite ticket views  |  [staff] Ticket View Management
+GET    /v1/staff/ticket-views/fields  |  List all fields that can be used in ticket views  |  [staff] Ticket View Management
+POST   /v1/staff/ticket-views/ids  |  Get ticket view by ID list  |  [staff] Ticket View Management
+POST   /v1/staff/ticket-views/list  |  List accessible views  |  [staff] Ticket View Management
+DELETE /v1/staff/ticket-views/{id}  |  Delete ticket view  |  [staff] Ticket View Management
+GET    /v1/staff/ticket-views/{id}  |  Get ticket view by ID  |  [staff] Ticket View Management
+PUT    /v1/staff/ticket-views/{id}  |  Update ticket view  |  [staff] Ticket View Management
+DELETE /v1/staff/ticket-views/{id}/favorite  |  Unfavorite a ticket view  |  [staff] Ticket View Management
+POST   /v1/staff/ticket-views/{id}/favorite  |  Favorite a ticket view  |  [staff] Ticket View Management
+POST   /v1/staff/topics  |  Create topic  |  [staff] Topic Management
+POST   /v1/staff/topics/options/batch  |  Get topic options by IDs  |  [staff] Topic Management
+POST   /v1/staff/topics/page  |  Page query topics  |  [staff] Topic Management
+GET    /v1/staff/topics/{id}  |  Get topic by ID  |  [staff] Topic Management
+PUT    /v1/staff/topics/{id}  |  Update topic  |  [staff] Topic Management
+POST   /v1/staff/uf-dashboard/count  |  Get UF Dashboard count statistics  |  [staff] UF Dashboard
+GET    /v1/staff/uf-dashboard/facility-states  |  Get all distinct facility states  |  [staff] UF Dashboard
+POST   /v1/staff/uf-dashboard/statistics  |  Get UF statistics grouped by facility and organization  |  [staff] UF Dashboard
+POST   /v1/staff/uf-dashboard/statistics/by-facility  |  Get UF ticket statistics grouped by facility  |  [staff] UF Dashboard
+POST   /v1/staff/uf-dashboard/statistics/by-state  |  Get UF ticket statistics grouped by facility state  |  [staff] UF Dashboard
+POST   /v1/staff/uf-dashboard/ticket-count-trend  |  Get UF ticket count trend over time  |  [staff] UF Dashboard
+POST   /v1/staff/report/staff/productive/report  |  Get staff productive report  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/productivity/timeline  |  Get staff productivity timeline  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/workforce/page  |  Get staff workforce page data  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/workforce/shift-timeline  |  Get staff shift timeline data  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/workforce/statistic  |  Get staff statistic data  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/workforce/ticket/activity  |  Get ticket activity statistics  |  [staff] Wfm Dashboard
+POST   /v1/staff/report/staff/workforce/timeline  |  Get staff workforce timeline data  |  [staff] Wfm Dashboard
+POST   /v1/staff/workflow/definition/activate/{key}  |  Activate process definition by key  |  [staff] Workflow Definition Management
+POST   /v1/staff/workflow/definition/deploy  |  Deploy workflow definition  |  [staff] Workflow Definition Management
+POST   /v1/staff/workflow/definition/deploy-file  |  Deploy workflow definition by file  |  [staff] Workflow Definition Management
+POST   /v1/staff/workflow/definition/page  |  Query process definitions  |  [staff] Workflow Definition Management
+POST   /v1/staff/workflow/definition/suspend/{key}  |  Suspend process definition by key  |  [staff] Workflow Definition Management
+GET    /v1/staff/workflow/definition/{id}  |  Get process definition by ID  |  [staff] Workflow Definition Management
+POST   /v1/staff/workflow/diagram/info  |  Get workflow diagram information  |  [staff] Workflow Diagram Management
+POST   /v1/staff/workflow/instances/cancel  |  Cancel process instance  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/historic/page  |  Query historic process instances  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/start  |  Start workflow  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/tasks/complete  |  Complete task  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/tasks/historic/page  |  Query historic tasks  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/tasks/my-tasks/page  |  Query my tasks  |  [staff] Workflow Instance Management
+POST   /v1/staff/workflow/instances/tasks/page  |  Query active tasks  |  [staff] Workflow Instance Management
+GET    /v1/staff/workflow/instances/tasks/{taskId}  |  Get historic task by ID  |  [staff] Workflow Instance Management
+GET    /v1/staff/workflow/instances/{processInstanceId}  |  Get historic process instance by ID  |  [staff] Workflow Instance Management
+POST   /v1/staff/report/staff/workforce/exception  |  -  |  [staff] anomaly-analysis-controller
+POST   /v1/staff/customers  |  -  |  [staff] customer-controller
+DELETE /v1/staff/customers/batch/organization  |  -  |  [staff] customer-controller
+PUT    /v1/staff/customers/batch/organization  |  -  |  [staff] customer-controller
+POST   /v1/staff/customers/options/batch  |  -  |  [staff] customer-controller
+POST   /v1/staff/customers/page  |  -  |  [staff] customer-controller
+GET    /v1/staff/customers/phone/{phone}  |  -  |  [staff] customer-controller
+GET    /v1/staff/customers/{id}  |  -  |  [staff] customer-controller
+PUT    /v1/staff/customers/{id}  |  -  |  [staff] customer-controller
+PUT    /v1/staff/customers/{id}/password/reset  |  -  |  [staff] customer-controller
+POST   /v1/staff/customer-organizations  |  -  |  [staff] customer-organization-controller
+POST   /v1/staff/customer-organizations/options/batch  |  -  |  [staff] customer-organization-controller
+POST   /v1/staff/customer-organizations/page  |  -  |  [staff] customer-organization-controller
+GET    /v1/staff/customer-organizations/{id}  |  -  |  [staff] customer-organization-controller
+PUT    /v1/staff/customer-organizations/{id}  |  -  |  [staff] customer-organization-controller
+POST   /v1/staff/extend/facility  |  -  |  [staff] facility-controller
+POST   /v1/staff/extend/facility/options/batch  |  -  |  [staff] facility-controller
+POST   /v1/staff/extend/facility/page  |  -  |  [staff] facility-controller
+GET    /v1/staff/extend/facility/{id}  |  -  |  [staff] facility-controller
+PUT    /v1/staff/extend/facility/{id}  |  -  |  [staff] facility-controller
+POST   /v1/staff/extend/roster  |  -  |  [staff] roster-controller
+POST   /v1/staff/extend/roster/page  |  -  |  [staff] roster-controller
+GET    /v1/staff/extend/roster/personnel-list  |  -  |  [staff] roster-controller
+GET    /v1/staff/extend/roster/running-job-info  |  -  |  [staff] roster-controller
+POST   /v1/staff/extend/roster/update-job  |  -  |  [staff] roster-controller
+DELETE /v1/staff/extend/roster/{id}  |  -  |  [staff] roster-controller
+GET    /v1/staff/extend/roster/{id}  |  -  |  [staff] roster-controller
+PUT    /v1/staff/extend/roster/{id}  |  -  |  [staff] roster-controller
+POST   /v1/staff/extend/roster/primary-contact-review/batch-confirm  |  -  |  [staff] roster-primary-contact-review-controller
+GET    /v1/staff/extend/roster/primary-contact-review/contact-rules  |  -  |  [staff] roster-primary-contact-review-controller
+GET    /v1/staff/extend/roster/primary-contact-review/exclude-emails  |  -  |  [staff] roster-primary-contact-review-controller
+POST   /v1/staff/extend/roster/primary-contact-review/page  |  -  |  [staff] roster-primary-contact-review-controller
+GET    /v1/staff/extend/roster/primary-contact-review/stats  |  -  |  [staff] roster-primary-contact-review-controller
+POST   /v1/staff/extend/roster/primary-contact-review/submit  |  -  |  [staff] roster-primary-contact-review-controller
+POST   /v1/staff/extend/roster/primary-contact-review/unlock/{id}  |  -  |  [staff] roster-primary-contact-review-controller
+POST   /v1/staff/extend/teams/channel/credentials  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/credentials/status  |  -  |  [staff] teams-channel-controller
+POST   /v1/staff/extend/teams/channel/credentials/test  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/kb/config  |  -  |  [staff] teams-channel-controller
+PUT    /v1/staff/extend/teams/channel/kb/config  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/kb/list  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/oauth/callback  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/oauth/url  |  -  |  [staff] teams-channel-controller
+POST   /v1/staff/extend/teams/channel/page  |  -  |  [staff] teams-channel-controller
+POST   /v1/staff/extend/teams/channel/sync  |  -  |  [staff] teams-channel-controller
+GET    /v1/staff/extend/teams/channel/{id}  |  -  |  [staff] teams-channel-controller
+PUT    /v1/staff/extend/teams/channel/{id}/enabled  |  -  |  [staff] teams-channel-controller
+POST   /v1/staff/ticket-escalations  |  -  |  [staff] ticket-escalation-controller
+GET    /v1/staff/ticket-escalations/ticket/{ticketId}/channels  |  -  |  [staff] ticket-escalation-controller
+GET    /v1/staff/ticket-escalations/ticket/{ticketId}/current  |  -  |  [staff] ticket-escalation-controller
+GET    /v1/staff/ticket-escalations/ticket/{ticketId}/list  |  -  |  [staff] ticket-escalation-controller
+GET    /v1/staff/ticket-escalations/ticket/{ticketId}/summary/stream  |  -  |  [staff] ticket-escalation-controller
+GET    /v1/staff/ticket-escalations/{ticketEscalationId}/messages  |  -  |  [staff] ticket-escalation-controller
+POST   /v1/staff/ticket-escalations/{ticketEscalationId}/reply  |  -  |  [staff] ticket-escalation-controller
+POST   /v1/staff/ticket/side-conversations  |  -  |  [staff] ticket-side-conversation-controller
+POST   /v1/staff/ticket/side-conversations/reply  |  -  |  [staff] ticket-side-conversation-controller
+GET    /v1/staff/ticket/side-conversations/ticket/{ticketId}  |  -  |  [staff] ticket-side-conversation-controller
+GET    /v1/staff/ticket/side-conversations/{id}  |  -  |  [staff] ticket-side-conversation-controller
+POST   /v1/staff/ticket/side-conversations/{sideConversationId}/messages  |  -  |  [staff] ticket-side-conversation-controller
+POST   /v1/staff/user/batch-parse-and-create  |  -  |  [staff] user-info-controller
+GET    /v1/staff/user/search  |  -  |  [staff] user-info-controller
+POST   /v1/tenant/tenants  |  Create tenant  |  [tenant] Tenant Management
+POST   /v1/tenant/tenants/batch  |  Get tenants by IDs  |  [tenant] Tenant Management
+GET    /v1/tenant/tenants/domain-available  |  Check domain availability  |  [tenant] Tenant Management
+GET    /v1/tenant/tenants/domain/{domain}  |  Get tenant by domain  |  [tenant] Tenant Management
+GET    /v1/tenant/tenants/enabled  |  Get all enabled tenants  |  [tenant] Tenant Management
+POST   /v1/tenant/tenants/page  |  Page query tenants  |  [tenant] Tenant Management
+DELETE /v1/tenant/tenants/{id}  |  Delete tenant  |  [tenant] Tenant Management
+GET    /v1/tenant/tenants/{id}  |  Get tenant by ID  |  [tenant] Tenant Management
+PUT    /v1/tenant/tenants/{id}  |  Update tenant  |  [tenant] Tenant Management
