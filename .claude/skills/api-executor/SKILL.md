@@ -38,7 +38,7 @@ disable-model-invocation: true
 ### 1. 读取认证配置
 
 ```bash
-cat .claude_back/api-config.json
+cat .claude/api-config.json
 ```
 
 验证三个必填字段都存在且非空：`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。

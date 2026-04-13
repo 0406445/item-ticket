@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(rm -rf /Volumes/SN770/NESTS/company/item-tickets-be/.temp/agentforce/.claude/skills/api-search/data)",
-      "Bash(cp -r /Volumes/SN770/NESTS/company/item-tickets-be/.temp/agentforce/apis /Volumes/SN770/NESTS/company/item-tickets-be/.temp/agentforce/.claude/skills/api-search/apis)"
-    ]
-  }
-}
