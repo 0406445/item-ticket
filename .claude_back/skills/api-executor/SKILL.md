@@ -7,7 +7,8 @@ disable-model-invocation: true
 
 # API Executor
 
-这是给执行型子 agent 用的底层技能，不直接承担用户对话。
+用于根据已确认的 `request_plan` 执行 item-tickets 请求。
+这是内部技能，只供执行型子 agent 使用，不直接面向用户。
 
 ## 前置条件
 

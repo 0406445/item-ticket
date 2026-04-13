@@ -7,7 +7,8 @@ disable-model-invocation: true
 
 # API Search
 
-这是给子 agent 用的底层技能，不直接承担用户对话。
+用于在 item-tickets API 索引和 OpenAPI 文档中查找接口与 schema。
+这是内部技能，只供子 agent 使用，不直接面向用户。
 
 ## 文件位置
 
