@@ -1,6 +1,6 @@
 ---
 name: ticket-ops
-description: "工单处理领域知识。用于识别工单类意图、实体解析路径和多步动作拆分方式。"
+description: "工单处理知识，用于回复、备注、状态流转、分派和工单查询。"
 user-invocable: false
 ---
 

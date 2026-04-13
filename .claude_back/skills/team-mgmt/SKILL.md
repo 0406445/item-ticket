@@ -1,6 +1,6 @@
 ---
 name: team-mgmt
-description: "团队管理领域知识。用于识别成员管理意图、范围限制、常见名称解析路径和复合步骤。"
+description: "团队管理知识，用于成员增删、员工入组和员工信息相关操作。"
 user-invocable: false
 ---
 

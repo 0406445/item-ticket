@@ -1,6 +1,6 @@
 ---
 name: work-status
-description: "工作状态领域知识。用于识别统计查询意图、时间范围默认值和角色可见范围。"
+description: "工作状态知识，用于个人、团队和部门的工单统计与趋势查询。"
 user-invocable: false
 ---
 

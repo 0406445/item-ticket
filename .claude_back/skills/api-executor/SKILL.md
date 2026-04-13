@@ -1,6 +1,6 @@
 ---
 name: api-executor
-description: "内部 API 执行技能。供执行型子 agent 读取认证配置、构造请求并调用 item-tickets API。"
+description: "内部 API 执行技能，用于读取认证配置并执行已确认的 item-tickets 请求。"
 user-invocable: false
 disable-model-invocation: true
 ---

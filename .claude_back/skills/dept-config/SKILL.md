@@ -1,6 +1,6 @@
 ---
 name: dept-config
-description: "部门配置领域知识。用于识别部门设置类意图、权限边界和常见辅助查询。"
+description: "部门配置知识，用于负责人、邮箱、Atlas 绑定和部门设置相关操作。"
 user-invocable: false
 ---
 

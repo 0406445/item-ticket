@@ -1,6 +1,6 @@
 ---
 name: filter-rules
-description: "工单筛选规则领域知识。当前默认不对终端用户开放，但保留 API 线索和权限边界。"
+description: "工单筛选规则知识，用于规则组和可用筛选字段相关操作。"
 user-invocable: false
 ---
 

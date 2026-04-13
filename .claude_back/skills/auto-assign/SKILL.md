@@ -1,6 +1,6 @@
 ---
 name: auto-assign
-description: "自动分配规则领域知识。当前默认不对终端用户开放，但保留 API 线索和权限边界。"
+description: "自动分配规则知识，用于规则、工作量和分配历史相关操作。"
 user-invocable: false
 ---
 

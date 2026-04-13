@@ -1,6 +1,6 @@
 ---
 name: admin-ops
-description: "管理员领域知识。用于识别系统级管理意图、权限边界和 API 查找关键词。仅 Admin 可用。"
+description: "管理员系统管理知识，用于部门、员工、Topic 和系统配置相关操作。"
 user-invocable: false
 ---
 

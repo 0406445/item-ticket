@@ -1,6 +1,6 @@
 ---
 name: api-search
-description: "内部 API 检索技能。供子 agent 在 item-tickets API 索引和 OpenAPI 文档中定位接口、查看 schema。"
+description: "内部 API 检索技能，用于查找 item-tickets 接口及请求响应 schema。"
 user-invocable: false
 disable-model-invocation: true
 ---
