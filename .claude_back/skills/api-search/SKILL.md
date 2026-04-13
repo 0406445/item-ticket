@@ -1,16 +1,18 @@
 ---
 name: api-search
-description: "Search and browse the item-tickets API index (702 endpoints). Use when the user asks about APIs, endpoints, request/response schemas, or needs to find a specific API. Examples: \"find ticket API\", \"what APIs are available for customer\", \"show me the staff dashboard endpoints\", \"API for creating ticket\""
+description: "内部 API 检索技能。供子 agent 在 item-tickets API 索引和 OpenAPI 文档中定位接口、查看 schema。"
+user-invocable: false
+disable-model-invocation: true
 ---
 
-# API Search（API 索引查询）
+# API Search
 
-当用户需要**查找、浏览、了解** item-tickets 后端 API 时使用本技能。
+这是给子 agent 用的底层技能，不直接承担用户对话。
 
-## 文件结构
+## 文件位置
 
 ```
-.claude/skills/api-search/
+${CLAUDE_SKILL_DIR}/
 ├── SKILL.md                        ← 本文件
 └── apis/
     ├── INDEX.txt                   ← 扁平文本索引（grep 搜索用）
@@ -26,80 +28,57 @@ description: "Search and browse the item-tickets API index (702 endpoints). Use 
 
 Sources（5 个来源）：`customer`, `iam`, `open`, `staff`, `tenant`
 
-INDEX.txt 每行格式：`METHOD PATH | summary | cn_summary | [source] tag_cn`
+`INDEX.txt` 每行格式：
+`METHOD PATH | summary | cn_summary | [source] tag_cn`
 
-- `cn_summary`：中文操作摘要（如"创建 部门"、"分页查询 工单"）
-- `tag_cn`：中文分类标签（如"部门管理"、"工单管理"）
+- `cn_summary` 是中文操作摘要
+- `tag_cn` 是中文分类标签
 
-支持中英文搜索，例如搜"创建部门"或"create department"都能命中。
+## 使用规则
 
-## 工作流
+1. 先用索引召回候选，再按 source 打开对应 `api-docs-{source}.json`
+2. 优先读取最小必要片段，不要动辄读取 `api-docs-all.json`
+3. path 使用索引里的原始 path，例如 `/v1/staff/tickets/page`
+4. 只展开当前判断需要的 `$ref`
+5. 结果必须可供别的 agent 继续处理，不要输出大段无结构说明
 
-### 1. 关键词搜索（最常用）
+## 推荐检索方式
 
-用 grep 搜索 `apis/INDEX.txt`（路径相对于本 skill 目录）：
-
-```bash
-grep -i "ticket" .claude/skills/api-search/apis/INDEX.txt
-```
-
-支持中文搜索：
-```bash
-# 搜中文关键词
-grep "创建.*部门\|部门.*创建" .claude/skills/api-search/apis/INDEX.txt
-
-# 搜中文操作动词
-grep "分页查询" .claude/skills/api-search/apis/INDEX.txt
-
-# 搜中文分类
-grep "部门管理" .claude/skills/api-search/apis/INDEX.txt
-```
-
-可组合过滤：
-```bash
-# 只看某个 source
-grep "\[staff\]" .claude/skills/api-search/apis/INDEX.txt
-
-# 只看 POST 接口
-grep "^POST" .claude/skills/api-search/apis/INDEX.txt
-
-# 组合：staff 下的 ticket 相关 POST 接口
-grep -i "ticket" .claude/skills/api-search/apis/INDEX.txt | grep "\[staff\]" | grep "^POST"
-```
-
-### 2. 浏览目录（了解有哪些模块）
-
-读取 `apis/INDEX.md` 的 Table of Contents 部分（前 100 行左右），展示所有 source 和 tag 分组。
-
-### 3. 查看完整 API 详情（请求参数、响应 schema）
-
-1. 先从 `apis/INDEX.txt` 找到目标 API 及其 `[source]`
-2. 读取对应的 `apis/api-docs-{source}.json`
-3. 在 `paths` 对象中定位具体路径和方法
-4. 展开 `$ref` 引用（从 `components/schemas`）获取完整 schema
-5. 清晰展示：路径参数、查询参数、请求体、响应体
-
-### 4. 用 jq 做结构化查询（高级）
+### 1. 文本召回
 
 ```bash
-# 搜索路径包含 ticket 的所有 API
-cat .claude/skills/api-search/apis/INDEX.jsonl | jq -r 'select(.path | contains("ticket")) | "\(.method) \(.path) — \(.summary)"'
-
-# 搜索某个 tag 下的所有 API
-cat .claude/skills/api-search/apis/INDEX.jsonl | jq -r 'select(.tag == "Ticket API") | "\(.method) \(.path) — \(.summary)"'
+rg -n "ticket|工单" "${CLAUDE_SKILL_DIR}/apis/INDEX.txt"
 ```
 
-## Checklist
+常见组合方式：
+```bash
+rg -n "^POST .*departments" "${CLAUDE_SKILL_DIR}/apis/INDEX.txt"
+rg -n "\[staff\].*部门管理" "${CLAUDE_SKILL_DIR}/apis/INDEX.txt"
+```
 
+### 2. 结构化过滤
+
+```bash
+jq -c 'select(.source == "staff" and (.summary | test("department"; "i")))' \
+  "${CLAUDE_SKILL_DIR}/apis/INDEX.jsonl"
 ```
-- [ ] 用 grep 在 apis/INDEX.txt 中搜索关键词
-- [ ] 确认目标 API 的 source 和 path
-- [ ] 如需详情，读取 apis/api-docs-{source}.json 中对应的 path 定义
-- [ ] 展开 $ref 引用，展示完整的请求/响应 schema
-```
+
+### 3. 查看 OpenAPI 详情
+
+1. 从索引确定 `source`
+2. 读取 `${CLAUDE_SKILL_DIR}/apis/api-docs-{source}.json`
+3. 在 `paths` 中定位 path + method
+4. 必要时从 `components.schemas` 展开 `$ref`
+
+## 检索启发式
+
+- 动作词优先映射到 method，例如创建/新增更偏向 `POST`
+- 实体词优先匹配 summary、tag、path 段
+- 如果是“名字转 ID”“查选项”“分页查询”这类辅助意图，优先查 `page`、`options`、`list`
+- 对多个候选，比较必填参数、返回结构和 source 是否贴近当前场景
 
 ## 注意事项
 
-- `api-docs-all.json` 是全量合并文件（1.7MB），一般不需要读取，优先用分 source 的文件
-- `staff` 最大（577 endpoints），搜索时建议加关键词缩小范围
-- 索引基于 2026-04-09 的 OpenAPI 导出，如 API 有更新需重新生成索引
+- `staff` 是最大 source，优先多给几个关键词缩小范围
+- `api-docs-all.json` 只在跨 source 对比时使用
+- 本技能只提供检索方法，不负责输出格式，最终返回结构由调用它的子 agent 决定

@@ -1,36 +1,33 @@
 ---
 name: auto-assign
-description: "自动分配规则管理领域知识（暂未在引导助手中开放）。"
+description: "自动分配规则领域知识。当前默认不对终端用户开放，但保留 API 线索和权限边界。"
 user-invocable: false
 ---
 
-# 自动分配规则管理（暂未开放）
+# 自动分配规则领域知识
 
-此功能的 API 已就绪，但尚未在引导助手中开放。
+此域暂不默认开放给用户，主 agent 只有在用户明确提到时才进入解释或评估。
 
-## 已确认可用的 API
+## 访问边界
 
-| 操作 | API | 来源 |
-|------|-----|------|
-| 创建规则 | POST /v1/staff/auto-assign/rule | staff |
-| 更新规则 | PUT /v1/staff/auto-assign/rule | staff |
-| 删除规则 | DELETE /v1/staff/auto-assign/rule/{id} | staff |
-| 查询规则列表 | POST /v1/staff/auto-assign/rule/page | staff |
-| 更新规则状态 | PUT /v1/staff/auto-assign/rule/status | staff |
-| 查询员工工作量 | POST /v1/staff/auto-assign/workload/page | staff |
-| 查询分配历史 | POST /v1/staff/auto-assign/history/page | staff |
+- `TeamLeader`：自己部门
+- `Admin`：全局
+- 其他角色：无权
 
-## 支持的分配策略
+## API 查找种子
 
-- Round Robin（轮询分配）
-- Workload（按工作量分配）
-- 每人最大工单数量限制（limitNumber，0 表示不限制）
+- `auto assign rule`
+- `auto assign rule page`
+- `auto assign workload`
+- `auto assign history`
 
-## 当用户请求此功能时
+## 业务语义
 
-回复用户："自动分配规则功能正在开发中，预计后续版本开放。目前你可以手动转移工单给指定人员。"
+- 常见动作：创建规则、更新规则、删除规则、开关规则、看工作量、看分配历史
+- 常见策略：轮询、按工作量、每人上限
+- 关键输入：部门、策略、状态、限制人数
 
-## 权限要求
+## 默认回复策略
 
-- TeamLeader：可管理自己部门的分配规则
-- Admin：可管理所有部门的分配规则
+- 如果产品策略仍未开放，主 agent 优先回复“功能暂未开放”，并建议手动分配
+- 如果后续开放，这个 skill 可以直接被主 agent 用作领域知识，不需要再改子 agent

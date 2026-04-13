@@ -1,21 +1,26 @@
 ---
 name: api-executor
-description: "Execute API requests against item-tickets backend. Takes validated API info (method, path, body), constructs curl with auth headers, executes, and returns structured results with response validation."
+description: "内部 API 执行技能。供执行型子 agent 读取认证配置、构造请求并调用 item-tickets API。"
+user-invocable: false
+disable-model-invocation: true
 ---
 
-# API Executor（API 请求执行）
+# API Executor
 
-当需要**实际发送 HTTP 请求**到 item-tickets 后端时使用本技能。
+这是给执行型子 agent 用的底层技能，不直接承担用户对话。
 
 ## 前置条件
 
-调用本 skill 前，必须已经完成：
-1. API 查找（通过 findapiagent）
-2. 参数校验和用户确认（通过 api-validator）
+调用前应当已经拿到结构化的 `request_plan`，至少包含：
+- `method`
+- `path`
+- `path_params`
+- `query_params`
+- `body`
 
 ## 认证配置
 
-认证信息从 `.claude/api-config.json` 读取：
+认证信息从 `.claude_back/api-config.json` 读取：
 
 ```json
 {
@@ -25,23 +30,23 @@ description: "Execute API requests against item-tickets backend. Takes validated
 }
 ```
 
-如果配置文件不存在或缺少字段，**必须停止执行**并提示用户创建配置文件。
+如果配置文件不存在或缺少字段，必须停止执行并把错误交回主 agent。
 
 ## 执行流程
 
 ### 1. 读取认证配置
 
 ```bash
-cat .claude/api-config.json
+cat .claude_back/api-config.json
 ```
 
 验证三个必填字段都存在且非空：`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。
 
 ### 2. 构造 curl 命令
 
-baseUrl 固定为: `https://unisticket-staging.item.com/api/item-tickets`
+`baseUrl` 固定为：`https://unisticket-staging.item.com/api/item-tickets`
 
-**重要**：INDEX 中的 API path（如 `/v1/staff/staff`）不包含 `/api/item-tickets` 前缀，构造 URL 时必须拼接为 `baseUrl + path`，即 `https://unisticket-staging.item.com/api/item-tickets/v1/staff/staff`。如果缺少 `/api/item-tickets` 前缀，nginx 会返回 405 Not Allowed。
+索引中的 path 不带 `/api/item-tickets` 前缀，所以执行时必须拼接成 `baseUrl + path`。
 
 必须包含的固定请求头：
 - `accept: application/json, text/plain, */*`
@@ -56,7 +61,7 @@ baseUrl 固定为: `https://unisticket-staging.item.com/api/item-tickets`
 - `x-tickets-timezone: {从配置读取}`
 - `x-tenant-id: {从配置读取}`
 
-curl 参数规则：
+curl 规则：
 - 加 `-s` 静默模式
 - 加 `-w '\n%{http_code}'` 获取 HTTP 状态码
 - query 参数拼接在 URL
@@ -65,7 +70,7 @@ curl 参数规则：
 
 ### 3. 执行请求
 
-通过 bash 执行构造好的 curl 命令。
+通过 shell 执行构造好的 curl 命令。
 
 ### 4. 响应校验
 
@@ -92,14 +97,15 @@ curl 参数规则：
 
 ### 5. 返回结果
 
-输出格式：
+优先返回结构化 JSON：
 
 ```json
 {
-  "success": true,
+  "status": "success",
   "http_status": 201,
+  "business_success": true,
   "data": { ... },
-  "summary": "部门「技术部」创建成功，ID: 42"
+  "summary": "请求执行成功"
 }
 ```
 
@@ -107,28 +113,17 @@ curl 参数规则：
 
 ```json
 {
-  "success": false,
+  "status": "failed",
   "http_status": 400,
-  "error": "参数错误: name 字段不能为空",
+  "business_success": false,
+  "error_message": "参数错误: name 字段不能为空",
   "suggestion": "请提供部门名称后重试"
 }
 ```
 
-## Checklist
-
-```
-- [ ] 读取 .claude/api-config.json 获取认证信息
-- [ ] 验证认证字段完整
-- [ ] 构造完整 curl 命令
-- [ ] 执行请求
-- [ ] 校验 HTTP 状态码
-- [ ] 校验业务状态
-- [ ] 返回结构化结果
-```
-
 ## 注意事项
 
-- **绝对不要**在没有用户确认的情况下执行写操作（POST/PUT/DELETE）
-- 如果认证配置缺失，停止执行并引导用户创建配置
-- curl 输出可能很长，只提取关键信息返回
-- 敏感信息（token）不要在输出中完整展示，用 `***` 遮蔽
+- 写操作应由主 agent 先确认；如果调用方没确认，执行子 agent 应拒绝继续
+- curl 输出可能很长，只返回关键字段
+- 敏感信息不要原样回传，用 `***` 遮蔽
+- 这个 skill 负责执行约定，不负责业务解释或用户话术

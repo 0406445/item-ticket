@@ -1,37 +1,32 @@
 ---
 name: filter-rules
-description: "工单筛选规则管理领域知识（暂未在引导助手中开放）。"
+description: "工单筛选规则领域知识。当前默认不对终端用户开放，但保留 API 线索和权限边界。"
 user-invocable: false
 ---
 
-# 工单筛选规则管理（暂未开放）
+# 工单筛选规则领域知识
 
-此功能的 API 已就绪，但尚未在引导助手中开放。
+此域暂不默认开放给用户，主 agent 仅在用户明确提到时使用本知识。
 
-## 已确认可用的 API
+## 访问边界
 
-| 操作 | API | 来源 |
-|------|-----|------|
-| 创建筛选规则组 | POST /v1/staff/ticket/filter-group | staff |
-| 更新筛选规则组 | PUT /v1/staff/ticket/filter-group | staff |
-| 删除筛选规则组 | DELETE /v1/staff/ticket/filter-group/{id} | staff |
-| 查询筛选规则组列表 | POST /v1/staff/ticket/filter-group/page | staff |
-| 查询筛选规则组详情 | GET /v1/staff/ticket/filter-group/{id} | staff |
-| 查询可用筛选字段 | GET /v1/staff/ticket/filter/fields | staff |
+- `DeptManager`：自己部门
+- `Admin`：全局
+- 其他角色：无权
 
-## 支持的筛选条件
+## API 查找种子
 
-- 工单状态（status）
-- 优先级（priority）
-- 部门（department）
-- 日期范围（date range）
-- 工单主题（topic）
+- `ticket filter group`
+- `ticket filter fields`
+- `filter group page`
 
-## 当用户请求此功能时
+## 业务语义
 
-回复用户："筛选规则功能正在开发中，预计后续版本开放。目前你可以通过描述条件让我帮你查询工单。"
+- 常见动作：创建规则组、更新规则组、删除规则组、查看详情
+- 常见条件：状态、优先级、部门、时间范围、Topic
+- 辅助查询：先查可用筛选字段，再让用户配置规则
 
-## 权限要求
+## 默认回复策略
 
-- DeptManager：可管理自己部门的筛选规则
-- Admin：可管理所有部门的筛选规则
+- 如果产品策略仍未开放，主 agent 优先回复“功能暂未开放”，并引导用户直接描述筛选条件
+- 如果后续开放，此 skill 继续提供业务语义，无需把执行逻辑塞进 skill
