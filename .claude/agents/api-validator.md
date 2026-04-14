@@ -59,7 +59,15 @@ skills:
     {
       "field": "description",
       "user_label": "部门描述",
-      "reason": "可选"
+      "reason": "可选",
+      "default": null
+    },
+    {
+      "field": "status",
+      "user_label": "部门状态",
+      "reason": "可选",
+      "default": "active",
+      "enum_options": ["active", "inactive"]
     }
   ],
   "lookup_requirements": [],
@@ -112,3 +120,4 @@ skills:
 - `user_label` 要尽量用业务语言，方便主 agent 直接转述给用户
 - `warnings` 里只放对流程有影响的信息，例如不可逆、会覆盖旧值、需要跨部门权限
 - 当 schema 里存在枚举值时，在 `missing_required` 或 `optional_inputs` 中带上 `enum_options`
+- 当 schema 里存在 `default` 值时，在 `missing_required` 或 `optional_inputs` 中带上 `default` 字段，方便主 agent 展示给用户确认而非重复询问

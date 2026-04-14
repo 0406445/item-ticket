@@ -48,6 +48,7 @@ skills:
 - 路径使用索引里的原始 path，例如 `/v1/staff/departments`
 - source 必须明确，例如 `staff`、`open`
 - 只展开当前决策需要的 schema，不做无意义全量展开
+- 当 schema 字段包含 `default`、`enum`、`example` 时，必须原样带入 `body_properties` / `query_params` 的输出中，不得省略
 
 ## 输出格式
 
@@ -76,6 +77,12 @@ skills:
         "name": {
           "type": "string",
           "description": "部门名称"
+        },
+        "status": {
+          "type": "string",
+          "description": "部门状态",
+          "enum": ["active", "inactive"],
+          "default": "active"
         }
       }
     },

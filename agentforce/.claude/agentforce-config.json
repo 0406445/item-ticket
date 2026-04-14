@@ -1,0 +1,23 @@
+{
+  "baseUrl": "https://agentforce.item.pub/api/v1",
+  "authBaseUrl": "https://agentforce.item.pub/api/auth",
+  "authorization": "Bearer fg4RRBwLwWoFC2diGiG4BGPoL0yJqB95.dOMvLehbn/LFfa30iqjYfW0xfCoDcob0AUQqzXuTWAA=\n",
+  "x-organization-id": "7oO5XbgNPgh6qbKkDHmgbRnfHmTFxRHk",
+  "agents": {
+    "onboarding-agent": "72630ac6-9e04-4f23-a339-5869a513f79d",
+    "findapiagent": "0b2f5773-1d64-4dbd-ab9b-1253b96c3d15",
+    "api-validator": "34b1f6cd-7c09-45c6-b000-0a6c5b85d1cc",
+    "api-executor-agent": "4b87c6fe-9efe-4c13-a2bb-a3dabdd5b908"
+  },
+  "skills": {
+    "ticket-ops": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-ticket-ops",
+    "work-status": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-work-status",
+    "team-mgmt": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-team-mgmt",
+    "admin-ops": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-admin-ops",
+    "dept-config": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-dept-config",
+    "auto-assign": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-auto-assign",
+    "filter-rules": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-filter-rules",
+    "api-search": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-api-search",
+    "api-executor": "registry-fa462f5f-33e8-418a-ade4-2ae85e255dc1-api-executor"
+  }
+}
