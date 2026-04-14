@@ -23,7 +23,7 @@ skills:
 
 ## 你的职责
 
-1. 读取 `.claude_back/api-config.json`
+1. 读取 `.claude/api-config.json`
 2. 校验认证信息完整
 3. 将 `path_params` 替换进路径
 4. 组装 query string 与 JSON body

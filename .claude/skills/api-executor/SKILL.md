@@ -21,17 +21,18 @@ disable-model-invocation: true
 
 ## 认证配置
 
-认证信息从 `.claude_back/api-config.json` 读取：
+所有配置从 `.claude/api-config.json` 读取：
 
 ```json
 {
+  "baseUrl": "https://unisticket-staging.item.com/api/item-tickets",
   "x-tickets-token": "your-token-here",
   "x-tickets-timezone": "Asia/Shanghai",
   "x-tenant-id": "your-tenant-id"
 }
 ```
 
-如果配置文件不存在或缺少字段，必须停止执行并把错误交回主 agent。
+如果配置文件不存在或缺少任何字段，必须停止执行并把错误交回主 agent。
 
 ## 执行流程
 
@@ -41,13 +42,15 @@ disable-model-invocation: true
 cat .claude/api-config.json
 ```
 
-验证三个必填字段都存在且非空：`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。
+验证四个必填字段都存在且非空：`baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。
 
 ### 2. 构造 curl 命令
 
-`baseUrl` 固定为：`https://unisticket-staging.item.com/api/item-tickets`
+**【强制】baseUrl 必须从 `.claude/api-config.json` 的 `baseUrl` 字段读取，禁止硬编码、猜测或使用任何其他地址。**
 
-索引中的 path 不带 `/api/item-tickets` 前缀，所以执行时必须拼接成 `baseUrl + path`。
+- 禁止使用 localhost、127.0.0.1 或任何非配置文件中的地址
+- 索引中的 path 不带前缀，执行时必须拼接成 `{配置中的 baseUrl} + path`
+- 如果配置文件中没有 `baseUrl` 字段，停止执行并报错
 
 必须包含的固定请求头：
 - `accept: application/json, text/plain, */*`
