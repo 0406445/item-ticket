@@ -6,7 +6,7 @@ user-invocable: false
 
 # 自动分配规则
 
-提供自动分配规则相关的业务知识和 API 查找线索。
+提供自动分配规则相关的业务知识和 API playbook。
 默认不作为常规用户入口，仅在用户明确提到相关能力时使用。
 
 ## 访问边界
@@ -15,12 +15,15 @@ user-invocable: false
 - `Admin`：全局
 - 其他角色：无权
 
-## API 查找种子
+## 主 API
 
-- `auto assign rule`
-- `auto assign rule page`
-- `auto assign workload`
-- `auto assign history`
+- `POST /v1/staff/auto-assign/rule`
+- `PUT /v1/staff/auto-assign/rule`
+- `PUT /v1/staff/auto-assign/rule/status`
+- `DELETE /v1/staff/auto-assign/rule/{id}`
+- `POST /v1/staff/auto-assign/rule/page`
+- `POST /v1/staff/auto-assign/history/page`
+- `POST /v1/staff/auto-assign/workload/page`
 
 ## 业务语义
 
@@ -32,3 +35,8 @@ user-invocable: false
 
 - 如果产品策略仍未开放，主 agent 优先回复“功能暂未开放”，并建议手动分配
 - 如果后续开放，这个 skill 可以直接被主 agent 用作领域知识，不需要再改子 agent
+
+## 兜底规则
+
+- 规则、状态、工作量、历史优先使用这里列出的固定 API
+- 如果请求涉及未列出的细粒度字段枚举或新策略类型，再调用 `findapiagent`

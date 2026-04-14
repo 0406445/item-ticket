@@ -6,7 +6,7 @@ user-invocable: false
 
 # 工单筛选规则
 
-提供工单筛选规则相关的业务知识和 API 查找线索。
+提供工单筛选规则相关的业务知识和 API playbook。
 默认不作为常规用户入口，仅在用户明确提到相关能力时使用。
 
 ## 访问边界
@@ -15,11 +15,18 @@ user-invocable: false
 - `Admin`：全局
 - 其他角色：无权
 
-## API 查找种子
+## 主 API
 
-- `ticket filter group`
-- `ticket filter fields`
-- `filter group page`
+- `POST /v1/staff/ticket/filter-group`
+- `PUT /v1/staff/ticket/filter-group`
+- `GET /v1/staff/ticket/filter-group/{id}`
+- `DELETE /v1/staff/ticket/filter-group/{id}`
+- `POST /v1/staff/ticket/filter-group/page`
+- `POST /v1/staff/ticket/filter`
+- `PUT /v1/staff/ticket/filter`
+- `GET /v1/staff/ticket/filter/{id}`
+- `DELETE /v1/staff/ticket/filter/{id}`
+- `GET /v1/staff/ticket/filter/fields`
 
 ## 业务语义
 
@@ -31,3 +38,8 @@ user-invocable: false
 
 - 如果产品策略仍未开放，主 agent 优先回复“功能暂未开放”，并引导用户直接描述筛选条件
 - 如果后续开放，此 skill 继续提供业务语义，无需把执行逻辑塞进 skill
+
+## 兜底规则
+
+- 规则组、规则详情、可用筛选字段优先使用这里列出的固定 API
+- 如果某个字段的枚举、路径或附加 lookup 仍不明确，再调用 `findapiagent`
