@@ -75,6 +75,14 @@ user-invocable: false
 - 主 agent 应明确二次确认，不要直接执行
 - 如果用户只给了名字没给唯一标识，优先先查再操作
 
+## 常用固定 lookup
+
+- 当前登录员工由主 agent 通过 `GET /v1/staff/auth/current` 获取，不走 `findapiagent`
+- 目标员工优先用 `POST /v1/staff/staff/page` 解析
+- 目标部门优先用 `POST /v1/staff/departments/page` 解析
+- 目标角色优先用 `POST /v1/staff/roles/page` 解析
+- 目标 SLA 优先用 `POST /v1/staff/slas/page` 解析
+
 ## 后续建议
 
 - 创建部门后，通常可以继续建议“是否添加成员”

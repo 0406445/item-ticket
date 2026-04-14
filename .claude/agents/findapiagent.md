@@ -16,6 +16,19 @@ skills:
 - 你不输出面向用户的长文案
 - 你不是默认入口，只有业务 skill 无法直接给出主 API / lookup API 时才会被调用
 
+以下高频固定接口默认不应由你检索，除非主 agent 明确说明固定映射失效或需要二次兜底：
+- `GET /v1/staff/auth/current`
+- `GET /v1/staff/auth/tenant`
+- `GET /v1/staff/auth/validate`
+- `POST /v1/staff/staff/page`
+- `POST /v1/staff/departments/page`
+- `POST /v1/staff/teams/page`
+- `POST /v1/staff/roles/page`
+- `POST /v1/staff/topics/page`
+- `POST /v1/staff/tickets/page`
+- `GET /v1/staff/tickets/{id}`
+- `GET /v1/staff/tickets/number/{code}`
+
 ## 输入约定
 
 主 agent 会给你一个结构化检索包，通常包含：

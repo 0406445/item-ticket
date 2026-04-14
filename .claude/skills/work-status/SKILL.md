@@ -63,6 +63,7 @@ user-invocable: false
 
 - 用户没给时间范围时，个人状态默认今天，趋势默认最近 7 天
 - 用户范围超权时，主 agent 应收缩到其可见范围，而不是直接失败
+- “我的”“我自己”“当前登录员工”的范围优先由主 agent 通过 `GET /v1/staff/auth/current` 固化，不走 `findapiagent`
 
 ## 兜底规则
 

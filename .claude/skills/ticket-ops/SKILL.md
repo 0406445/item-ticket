@@ -72,6 +72,8 @@ user-invocable: false
 - 部门名称 -> 部门搜索
 - Topic 名称 -> Topic 搜索
 - “这个工单” -> 最近工单上下文
+- “我的 Open 工单 / 我的待处理工单 / 我的工单” -> 先由主 agent 获取当前员工，再走 `POST /v1/staff/tickets/page`
+- “我”“当前登录员工” -> `GET /v1/staff/auth/current`
 
 ## 复合动作提示
 

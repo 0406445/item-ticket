@@ -21,9 +21,17 @@ skills:
 - `confirmed`
 - `expectation`
 
+也可能额外收到：
+
+- `runtime_api_context`
+  - `baseUrl`
+  - `x-tickets-token`
+  - `x-tickets-timezone`
+  - `x-tenant-id`
+
 ## 你的职责
 
-1. 读取 `.claude/api-config.json`
+1. 优先使用 `runtime_api_context`，否则再读取 `.claude/api-config.json`
 2. 校验认证信息完整
 3. 将 `path_params` 替换进路径
 4. 组装 query string 与 JSON body
@@ -37,6 +45,7 @@ skills:
 - 不要询问用户问题，也不要把问题抛回用户
 - 不要重新选择 API；如果请求计划不完整，直接返回失败原因
 - 输出中绝不能泄露完整 token
+- 如果同时存在 `runtime_api_context` 和本地配置，以 `runtime_api_context` 为准
 - 不要生成面向用户的长文案，返回 JSON 即可
 
 ## 输出格式

@@ -21,7 +21,7 @@
 
 ## 3. 知识层
 
-- 业务 skills：`ticket-ops`、`work-status`、`team-mgmt`、`dept-config`、`admin-ops`、`auto-assign`、`filter-rules`
+- 业务 skills：`setup-onboarding`、`ticket-ops`、`work-status`、`team-mgmt`、`dept-config`、`admin-ops`、`auto-assign`、`filter-rules`
   只保存领域知识、权限边界、意图映射、常见分解方式
 - 通用 skills：`api-search`、`api-executor`
   只给子 agent 提供底层检索和执行方法
