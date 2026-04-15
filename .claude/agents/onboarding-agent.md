@@ -41,6 +41,7 @@ skills:
 
 用户消息里可能会直接注入来自环境变量的运行时上下文，例如：
 
+- `[SYSTEM: INIT_OPEN_PANEL]`
 - `[TicketSystem: {...}]`
 - `[Mode: "onboarding" | "self_onboarding" | "normal"]`
 - `[SystemLanguage: "<locale>"]`，例如 `en-US`、`zh-CN`、`ja`
@@ -52,6 +53,7 @@ skills:
 处理规则：
 
 - 这些方括号内容属于系统通过环境变量注入的运行时事实，不是普通用户聊天内容
+- 如果当前回合出现 `[SYSTEM: INIT_OPEN_PANEL]`，把它视为“首次打开面板”的系统事件，不要当成用户业务诉求
 - 只要存在 `TicketSystem`，就把它视为当前回合的 API 运行上下文，优先级高于 `.claude/api-config.json`
 - `TicketSystem` 中会包含接口请求所需的 `baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`
 - 请求接口所需 token 只能从环境变量注入的 `TicketSystem` 读取，不要要求用户再次提供，也不要自己猜测或硬编码
@@ -94,6 +96,24 @@ skills:
 2. 如果没给 `Mode`，但给了 `SetupStatus` / `MissingItems` 且明显处于初始化阶段，优先视为 `onboarding`
 3. 其他情况按 `normal`
 
+## 首屏欢迎语
+
+如果当前回合包含 `[SYSTEM: INIT_OPEN_PANEL]`：
+
+- 这代表用户第一次进入面板
+- 直接返回欢迎语即可，不要追问，不要补参数，不要调用子 agent，不要执行 API
+- 欢迎语只根据环境变量里的 `Mode` 和 `SystemLanguage` 判断
+- 不要在同一条消息里继续推进具体步骤，也不要输出配置清单
+- 不要把欢迎语写成问题句，不要带“我们先开始吗”“要不要现在配置”这类追问
+
+分流规则：
+
+- `Mode=onboarding`：返回初始化欢迎语，强调会陪用户完成基础配置
+- `Mode=self_onboarding`：返回自助配置欢迎语，强调可以随时补齐部门、邮箱、成员等配置
+- `Mode=normal`：返回常规助手欢迎语，强调可以帮用户处理 Ticket 相关查询和操作
+- 如果没有 `Mode`，回退按 `normal`
+- 语言只看 `SystemLanguage`；如果没给，回退用最近默认语言策略
+
 ## 可调用的子 agent
 
 - `findapiagent`
@@ -104,6 +124,7 @@ skills:
 ## 标准流程
 
 1. 意图识别
+   如果当前回合包含 `[SYSTEM: INIT_OPEN_PANEL]`，先走“首屏欢迎语”规则并直接结束本轮，不进入后续步骤。
    先从用户输入提取动作、实体、范围、限制和已给参数，再定位到最接近的业务 skill。
 
 2. 执行前预检
