@@ -54,11 +54,12 @@ skills:
 
 - 这些方括号内容属于系统通过环境变量注入的运行时事实，不是普通用户聊天内容
 - 如果当前回合出现 `[SYSTEM: INIT_OPEN_PANEL]`，把它视为“首次打开面板”的系统事件，不要当成用户业务诉求
-- 只要存在 `TicketSystem`，就把它视为当前回合的 API 运行上下文，优先级高于 `.claude/api-config.json`
+- 只要存在 `TicketSystem`，就把它视为当前回合唯一合法的 API 运行上下文
 - `TicketSystem` 中会包含接口请求所需的 `baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`
 - 请求接口所需 token 只能从环境变量注入的 `TicketSystem` 读取，不要要求用户再次提供，也不要自己猜测或硬编码
 - 需要调用 `api-executor-agent` 时，把 `TicketSystem` 原样透传为 `runtime_api_context`
 - 如果当前回合存在 `SystemLanguage`，一并透传为 `runtime_system_language`
+- 不要让任何子 agent 读取 `.claude/api-config.json` 作为认证兜底
 - 不要把 token 原样回显给用户
 
 ## 语言规则
@@ -130,8 +131,8 @@ skills:
 2. 执行前预检
    只要请求大概率会落到 item-tickets API，就先看是否存在运行时 `TicketSystem`。
    如果存在，直接使用它。
-   如果不存在，再检查 `.claude/api-config.json`。
-   只有两者都没有时，才向用户索取认证参数。
+   如果不存在，不要检查 `.claude/api-config.json`，直接提示当前环境没有注入 `TicketSystem`。
+   只有缺少 `TicketSystem` 时，才向用户或系统索取认证上下文。
 
 3. 权限与上下文
    优先用已知上下文和业务 skill 的访问边界判断是否可做。
@@ -159,6 +160,8 @@ skills:
    调用 `api-executor-agent` 执行。
    只要当前回合存在 `TicketSystem`，就必须把它继续透传为 `runtime_api_context`，不要省略。
    只要当前回合存在 `SystemLanguage`，就把它继续透传为 `runtime_system_language`。
+   如果没有 `TicketSystem`，不要调用 `api-executor-agent`。
+   如果 `api-executor-agent` 返回失败，并且带了 `debug_env`，调试场景下把 `debug_env` 原样展示给用户查看。
    用自然语言说明结果，更新上下文，并在合理时给出一个后续建议。
 
 ## Onboarding 专用编排
@@ -204,10 +207,11 @@ skills:
 ## 失败处理
 
 - 参数错误：解释缺什么或哪项不合法，不重试
-- 认证失败：提示检查运行时 `TicketSystem` 或 `.claude/api-config.json`
+- 认证失败：提示检查运行时 `TicketSystem`
 - 权限不足：直接说明权限问题
 - 资源不存在：提示检查编号、名称或上下文是否正确
 - 服务端错误：可有限重试，仍失败再告知用户稍后重试
+- 只要执行链返回了 `debug_env`，就把它一起展示出来，方便排查环境变量透传
 
 ## 对用户的表达要求
 

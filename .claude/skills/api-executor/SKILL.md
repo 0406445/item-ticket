@@ -21,10 +21,9 @@ disable-model-invocation: true
 
 ## 认证配置
 
-优先级如下：
-
-1. 如果输入里提供了 `runtime_api_context`，必须优先使用它
-2. 只有没有 `runtime_api_context` 时，才读取 `.claude/api-config.json`
+执行时只允许使用输入里提供的 `runtime_api_context`。
+`runtime_api_context` 必须来自环境变量注入的 `[TicketSystem: {...}]`。
+禁止把 `.claude/api-config.json` 或其他本地文件当作认证兜底。
 
 `runtime_api_context` 通常来自环境变量注入的 `[TicketSystem: {...}]`，结构至少包含：
 
@@ -45,48 +44,43 @@ disable-model-invocation: true
 }
 ```
 
-本地调试配置文件格式：
-
-```json
-{
-  "baseUrl": "https://unisticket-staging.item.com/api/item-tickets",
-  "x-tickets-token": "your-token-here",
-  "x-tickets-timezone": "Asia/Shanghai",
-  "x-tenant-id": "your-tenant-id"
-}
-```
-
-如果两者都不可用，或缺少任一必填字段，必须停止执行并把错误交回主 agent。
+如果缺少 `runtime_api_context`，或缺少任一必填字段，必须立即停止执行并把错误交回主 agent。
+不要为了“补齐认证”去读取 `.claude/api-config.json`。
 
 ## 执行流程
 
-### 1. 读取认证配置
+### 1. 前置校验
 
-如果存在 `runtime_api_context`：
+先校验输入是否完整：
 
-- 直接使用 `runtime_api_context.baseUrl`
-- 直接使用 `runtime_api_context.x-tickets-token`
-- 直接使用 `runtime_api_context.x-tickets-timezone`
-- 直接使用 `runtime_api_context.x-tenant-id`
-- `x-tickets-token` 只能从 `runtime_api_context` 读取；它本质上来自环境变量 `TicketSystem`
-- 不要先读 `.claude/api-config.json`
-- 即使本地文件存在，也不要覆盖运行时传入值
+- 必须存在 `request_plan`
+- 必须存在 `runtime_api_context`
+- `request_plan` 缺失时，直接返回 `invalid_request_plan`
+- `runtime_api_context` 缺失时，直接返回 `missing_runtime_api_context`
+- 不要从自然语言自行猜测请求计划
+- 不要读取 `.claude/api-config.json`
+- 不要调用 `Read` 打开 `.claude/api-config.json`
+- 不要使用 `cat .claude/api-config.json`、`less .claude/api-config.json` 或任何等价方式读取本地认证文件
 
-如果不存在 `runtime_api_context`，再读取：
+### 2. 读取认证配置
 
-```bash
-cat .claude/api-config.json
-```
+只允许读取并使用：
+
+- `runtime_api_context.baseUrl`
+- `runtime_api_context.x-tickets-token`
+- `runtime_api_context.x-tickets-timezone`
+- `runtime_api_context.x-tenant-id`
 
 验证四个必填字段都存在且非空：`baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。
+`x-tickets-token` 只能从 `runtime_api_context` 读取；它本质上来自环境变量 `TicketSystem`。
 
-### 2. 构造 curl 命令
+### 3. 构造 curl 命令
 
-**【强制】baseUrl 必须从“当前生效配置”读取。当前生效配置优先是 `runtime_api_context`，其次才是 `.claude/api-config.json`。**
+**【强制】baseUrl 必须从 `runtime_api_context` 读取。**
 
-- 禁止使用 localhost、127.0.0.1 或任何非配置文件中的地址
-- 索引中的 path 不带前缀，执行时必须拼接成 `{当前生效的 baseUrl} + path`
-- 如果当前生效配置中没有 `baseUrl` 字段，停止执行并报错
+- 禁止使用 localhost、127.0.0.1 或任何非 `runtime_api_context` 中的地址
+- 索引中的 path 不带前缀，执行时必须拼接成 `{runtime_api_context.baseUrl} + path`
+- 如果 `runtime_api_context` 中没有 `baseUrl` 字段，停止执行并报错
 
 必须包含的固定请求头：
 - `accept: application/json, text/plain, */*`
@@ -97,9 +91,9 @@ cat .claude/api-config.json
 - `user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36`
 
 认证头从当前生效配置填充：
-- `x-tickets-token: {从当前生效配置读取}`
-- `x-tickets-timezone: {从当前生效配置读取}`
-- `x-tenant-id: {从当前生效配置读取}`
+- `x-tickets-token: {从 runtime_api_context 读取}`
+- `x-tickets-timezone: {从 runtime_api_context 读取}`
+- `x-tenant-id: {从 runtime_api_context 读取}`
 
 curl 规则：
 - 加 `-s` 静默模式
@@ -108,11 +102,11 @@ curl 规则：
 - path 参数替换到路径中
 - JSON body 用 `--data-raw`
 
-### 3. 执行请求
+### 4. 执行请求
 
 通过 shell 执行构造好的 curl 命令。
 
-### 4. 响应校验
+### 5. 响应校验
 
 拿到响应后，按以下顺序校验：
 
@@ -135,7 +129,7 @@ curl 规则：
 #### ③ 响应结构校验
 如果有预期的 response schema，检查返回的 JSON 是否包含预期的关键字段。
 
-### 5. 返回结果
+### 6. 返回结果
 
 优先返回结构化 JSON：
 
@@ -145,7 +139,8 @@ curl 规则：
   "http_status": 201,
   "business_success": true,
   "data": { ... },
-  "summary": "请求执行成功"
+  "summary": "请求执行成功",
+  "debug_env": null
 }
 ```
 
@@ -157,14 +152,34 @@ curl 规则：
   "http_status": 400,
   "business_success": false,
   "error_message": "参数错误: name 字段不能为空",
-  "suggestion": "请提供部门名称后重试"
+  "suggestion": "请提供部门名称后重试",
+  "debug_env": {
+    "runtime_api_context": {
+      "baseUrl": "https://...",
+      "x-tickets-token": "token-from-env",
+      "x-tickets-timezone": "Asia/Shanghai",
+      "x-tenant-id": "1"
+    },
+    "runtime_system_language": "en-US"
+  }
 }
 ```
+
+失败结果里的 `debug_env` 规则：
+
+- 必须返回这次实际收到的环境上下文
+- 至少包含 `runtime_api_context` 和 `runtime_system_language`
+- 没收到的字段显式返回 `null`
+- 不要自己构造不存在的 env 值
+- 这个字段就是给调试透传问题看的
 
 ## 注意事项
 
 - 写操作应由主 agent 先确认；如果调用方没确认，执行子 agent 应拒绝继续
 - curl 输出可能很长，只返回关键字段
 - 敏感信息不要原样回传，用 `***` 遮蔽
-- 如果输入同时给了 `runtime_api_context` 和本地 `.claude/api-config.json`，以 `runtime_api_context` 为准，不要自行比较或回退
+- 不要读取 `.claude/api-config.json`，即使它存在
+- 如果本地调试需要认证信息，也必须由调用方显式传入 `runtime_api_context`，不要自行读文件
+- 收到自然语言直输但缺少结构化 `request_plan` 时，直接失败，不要先读文件再判断
+- 失败时必须把当前收到的 env 上下文放进 `debug_env`
 - 这个 skill 负责执行约定，不负责业务解释或用户话术

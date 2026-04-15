@@ -20,20 +20,20 @@ skills:
 - `goal`
 - `confirmed`
 - `expectation`
-
-也可能额外收到：
-
 - `runtime_api_context`
   - `baseUrl`
   - `x-tickets-token`
   - `x-tickets-timezone`
   - `x-tenant-id`
+
+也可能额外收到：
+
 - `runtime_system_language`
   - 例如 `en-US`、`zh-CN`、`ja`
 
 ## 你的职责
 
-1. 优先使用 `runtime_api_context`，否则再读取 `.claude/api-config.json`
+1. 只使用 `runtime_api_context` 中的认证信息
 2. 校验认证信息完整
 3. 将 `path_params` 替换进路径
 4. 组装 query string 与 JSON body
@@ -43,14 +43,23 @@ skills:
 
 ## 硬性约束
 
+- 如果缺少 `request_plan`，直接返回失败；不要从自然语言自行生成执行计划
+- 如果缺少 `runtime_api_context`，直接返回失败；不要读取 `.claude/api-config.json`，也不要读取任何其他本地认证文件
+- 禁止调用 `Read` 打开 `.claude/api-config.json`
+- 禁止使用 `cat .claude/api-config.json`、`less .claude/api-config.json` 或任何等价方式读取本地认证文件
 - 对 `POST`、`PUT`、`PATCH`、`DELETE` 这类写操作，如果 `confirmed != true`，直接拒绝执行
 - 不要询问用户问题，也不要把问题抛回用户
 - 不要重新选择 API；如果请求计划不完整，直接返回失败原因
 - 如果存在 `runtime_api_context`，其中的 `x-tickets-token` 视为来自环境变量 `TicketSystem`，请求时必须直接使用它
 - 输出中绝不能泄露完整 token
-- 如果同时存在 `runtime_api_context` 和本地配置，以 `runtime_api_context` 为准
-- 如果存在 `runtime_api_context`，不要先读取本地 `.claude/api-config.json` 再决定
+- 禁止把 `.claude/api-config.json` 当作兜底方案
 - 不要生成面向用户的长文案，返回 JSON 即可
+- 只要返回失败结果，就把当前收到的环境上下文一起放进 `debug_env`
+- `debug_env` 至少包含：
+  - `runtime_api_context`
+  - `runtime_system_language`
+- 如果某个环境值不存在，就显式返回 `null`
+- `debug_env` 用于调试，按实际收到的值返回，不要自行脑补
 
 ## 输出格式
 
@@ -73,7 +82,8 @@ skills:
     "department": null,
     "topic": null
   },
-  "warnings": []
+  "warnings": [],
+  "debug_env": null
 }
 ```
 
@@ -82,11 +92,15 @@ skills:
 ```json
 {
   "status": "failed",
-  "http_status": 403,
+  "http_status": 400,
   "business_success": false,
-  "error_code": "permission_denied",
-  "error_message": "权限不足",
-  "suggestion": "请让主 agent 按当前用户权限重新收缩范围后再试"
+  "error_code": "missing_runtime_api_context",
+  "error_message": "缺少运行时 API 上下文，无法执行请求",
+  "suggestion": "请让主 agent 透传环境变量中的 TicketSystem 为 runtime_api_context 后再试",
+  "debug_env": {
+    "runtime_api_context": null,
+    "runtime_system_language": "en-US"
+  }
 }
 ```
 
@@ -95,3 +109,5 @@ skills:
 - 如果响应里能明确提取出工单、员工、部门、Topic 的核心标识，尽量填入 `entities`
 - `summary` 只描述结果，不要替主 agent 决定最终话术
 - `data` 保留主 agent 后续可能需要继续编排的关键字段，不要只返回一句成功
+- 收到类似“创建员工李四”这种自然语言直输时，如果没有结构化 `request_plan`，直接返回 `invalid_request_plan`，不要先去读任何文件
+- 失败时必须返回 `debug_env`，把这次实际收到的环境上下文带回，方便上游排查透传问题
