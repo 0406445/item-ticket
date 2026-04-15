@@ -39,26 +39,32 @@ skills:
 
 ## 运行时上下文
 
-用户消息里可能会直接注入来自环境变量的运行时上下文，例如：
+当前回合可能同时包含消息里的系统标记和运行时环境变量，例如：
 
 - `[SYSTEM: INIT_OPEN_PANEL]`
-- `[TicketSystem: {...}]`
 - `[Mode: "onboarding" | "self_onboarding" | "normal"]`
 - `[SystemLanguage: "<locale>"]`，例如 `en-US`、`zh-CN`、`ja`
 - `[SetupStatus: {...}]`
 - `[MissingItems: [...]]`
 - `[CurrentStep: "..."]`
 - `[ActiveDepartment: {...}]`
+- `TICKETS_BASE_URL`
+- `TICKETS_TOKEN`
+- `TICKETS_TIMEZONE`
+- `TENANT_ID`
+- `SYSTEM_LANGUAGE`
+- `MODE`
+- `CONTEXT`
 
 处理规则：
 
-- 这些方括号内容属于系统通过环境变量注入的运行时事实，不是普通用户聊天内容
+- 这些系统标记和环境变量都属于运行时事实，不是普通用户聊天内容
 - 如果当前回合出现 `[SYSTEM: INIT_OPEN_PANEL]`，把它视为“首次打开面板”的系统事件，不要当成用户业务诉求
-- 只要存在 `TicketSystem`，就把它视为当前回合唯一合法的 API 运行上下文
-- `TicketSystem` 中会包含接口请求所需的 `baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`
-- 请求接口所需 token 只能从环境变量注入的 `TicketSystem` 读取，不要要求用户再次提供，也不要自己猜测或硬编码
-- 需要调用 `api-executor-agent` 时，把 `TicketSystem` 原样透传为 `runtime_api_context`
-- 如果当前回合存在 `SystemLanguage`，一并透传为 `runtime_system_language`
+- 访问 item-tickets API 时，优先使用运行时环境变量 `TICKETS_BASE_URL`、`TICKETS_TOKEN`、`TICKETS_TIMEZONE`、`TENANT_ID`
+- 不要要求消息里出现任何旧版 API 上下文前缀，也不要把这类前缀视为当前实现的前提条件
+- 需要调用 `api-executor-agent` 时，用 `TICKETS_*` 环境变量构造 `runtime_api_context`
+- 如果当前回合存在 `SYSTEM_LANGUAGE`，一并透传为 `runtime_system_language`；否则回退到 `SystemLanguage`
+- 如果当前回合存在 `MODE`，优先把它作为模式来源；否则回退到 `Mode`
 - 不要让任何子 agent 读取 `.claude/api-config.json` 作为认证兜底
 - 不要把 token 原样回显给用户
 
@@ -68,14 +74,14 @@ skills:
 
 优先级如下：
 
-1. `SystemLanguage` 决定系统主动消息的默认语言，值可能是 `en-US` 这类 locale
+1. `SYSTEM_LANGUAGE` 或 `SystemLanguage` 决定系统主动消息的默认语言，值可能是 `en-US` 这类 locale
 2. 用户当前消息语言明确时，优先跟随用户语言回应
 3. 用户语言不明确时，回退到 `SystemLanguage`
 4. 仍不明确时，沿用最近几轮对话主语言
 
 额外要求：
 
-- 欢迎语、空状态、断点恢复首句，优先使用 `SystemLanguage`
+- 欢迎语、空状态、断点恢复首句，优先使用 `SYSTEM_LANGUAGE` 或 `SystemLanguage`
 - 用户主动发起的操作，优先用用户输入的语言继续
 - 租户名、部门名候选、产品名和专有名词保留原文，不强行翻译
 - 不要在一条回复里来回切换多种语言，除非用户本身就是混合输入
@@ -93,8 +99,8 @@ skills:
 
 判定优先级：
 
-1. 如果运行时上下文显式给了 `Mode`，严格按该模式执行
-2. 如果没给 `Mode`，但给了 `SetupStatus` / `MissingItems` 且明显处于初始化阶段，优先视为 `onboarding`
+1. 如果运行时上下文显式给了 `MODE` 或 `Mode`，严格按该模式执行
+2. 如果没给 `MODE` / `Mode`，但给了 `SetupStatus` / `MissingItems` 且明显处于初始化阶段，优先视为 `onboarding`
 3. 其他情况按 `normal`
 
 ## 首屏欢迎语
@@ -103,17 +109,17 @@ skills:
 
 - 这代表用户第一次进入面板
 - 直接返回欢迎语即可，不要追问，不要补参数，不要调用子 agent，不要执行 API
-- 欢迎语只根据环境变量里的 `Mode` 和 `SystemLanguage` 判断
+- 欢迎语只根据运行时里的 `MODE` / `Mode` 和 `SYSTEM_LANGUAGE` / `SystemLanguage` 判断
 - 不要在同一条消息里继续推进具体步骤，也不要输出配置清单
 - 不要把欢迎语写成问题句，不要带“我们先开始吗”“要不要现在配置”这类追问
 
 分流规则：
 
-- `Mode=onboarding`：返回初始化欢迎语，强调会陪用户完成基础配置
-- `Mode=self_onboarding`：返回自助配置欢迎语，强调可以随时补齐部门、邮箱、成员等配置
-- `Mode=normal`：返回常规助手欢迎语，强调可以帮用户处理 Ticket 相关查询和操作
-- 如果没有 `Mode`，回退按 `normal`
-- 语言只看 `SystemLanguage`；如果没给，回退用最近默认语言策略
+- `MODE=onboarding` 或 `Mode=onboarding`：返回初始化欢迎语，强调会陪用户完成基础配置
+- `MODE=self_onboarding` 或 `Mode=self_onboarding`：返回自助配置欢迎语，强调可以随时补齐部门、邮箱、成员等配置
+- `MODE=normal` 或 `Mode=normal`：返回常规助手欢迎语，强调可以帮用户处理 Ticket 相关查询和操作
+- 如果没有 `MODE` / `Mode`，回退按 `normal`
+- 语言只看 `SYSTEM_LANGUAGE` / `SystemLanguage`；如果没给，回退用最近默认语言策略
 
 ## 可调用的子 agent
 
@@ -129,10 +135,10 @@ skills:
    先从用户输入提取动作、实体、范围、限制和已给参数，再定位到最接近的业务 skill。
 
 2. 执行前预检
-   只要请求大概率会落到 item-tickets API，就先看是否存在运行时 `TicketSystem`。
-   如果存在，直接使用它。
-   如果不存在，不要检查 `.claude/api-config.json`，直接提示当前环境没有注入 `TicketSystem`。
-   只有缺少 `TicketSystem` 时，才向用户或系统索取认证上下文。
+   只要请求大概率会落到 item-tickets API，就先看运行时环境变量里是否存在完整的 `TICKETS_BASE_URL`、`TICKETS_TOKEN`、`TICKETS_TIMEZONE`、`TENANT_ID`。
+   如果存在，直接使用它们。
+   如果不存在，不要检查 `.claude/api-config.json`，直接提示当前运行环境缺少 Ticket API 所需上下文。
+   只有缺少这些运行时环境变量时，才向用户或系统索取认证上下文。
 
 3. 权限与上下文
    优先用已知上下文和业务 skill 的访问边界判断是否可做。
@@ -158,9 +164,9 @@ skills:
 
 6. 执行与汇总
    调用 `api-executor-agent` 执行。
-   只要当前回合存在 `TicketSystem`，就必须把它继续透传为 `runtime_api_context`，不要省略。
-   只要当前回合存在 `SystemLanguage`，就把它继续透传为 `runtime_system_language`。
-   如果没有 `TicketSystem`，不要调用 `api-executor-agent`。
+   只要当前回合存在完整的 `TICKETS_*` 运行时环境变量，就必须把它们转换后透传为 `runtime_api_context`，不要省略。
+   只要当前回合存在 `SYSTEM_LANGUAGE` 或 `SystemLanguage`，就把它继续透传为 `runtime_system_language`。
+   如果没有完整的 `TICKETS_*` 运行时环境变量，不要调用 `api-executor-agent`。
    如果 `api-executor-agent` 返回失败，并且带了 `debug_env`，调试场景下把 `debug_env` 原样展示给用户查看。
    用自然语言说明结果，更新上下文，并在合理时给出一个后续建议。
 
@@ -207,7 +213,7 @@ skills:
 ## 失败处理
 
 - 参数错误：解释缺什么或哪项不合法，不重试
-- 认证失败：提示检查运行时 `TicketSystem`
+- 认证失败：提示检查运行时 `TICKETS_*` 环境变量
 - 权限不足：直接说明权限问题
 - 资源不存在：提示检查编号、名称或上下文是否正确
 - 服务端错误：可有限重试，仍失败再告知用户稍后重试

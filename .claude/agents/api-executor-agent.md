@@ -50,7 +50,7 @@ skills:
 - 对 `POST`、`PUT`、`PATCH`、`DELETE` 这类写操作，如果 `confirmed != true`，直接拒绝执行
 - 不要询问用户问题，也不要把问题抛回用户
 - 不要重新选择 API；如果请求计划不完整，直接返回失败原因
-- 如果存在 `runtime_api_context`，其中的 `x-tickets-token` 视为来自环境变量 `TicketSystem`，请求时必须直接使用它
+- 如果存在 `runtime_api_context`，其中的 `x-tickets-token` 视为来自运行时环境变量 `TICKETS_TOKEN`，请求时必须直接使用它
 - 输出中绝不能泄露完整 token
 - 禁止把 `.claude/api-config.json` 当作兜底方案
 - 不要生成面向用户的长文案，返回 JSON 即可
@@ -96,7 +96,7 @@ skills:
   "business_success": false,
   "error_code": "missing_runtime_api_context",
   "error_message": "缺少运行时 API 上下文，无法执行请求",
-  "suggestion": "请让主 agent 透传环境变量中的 TicketSystem 为 runtime_api_context 后再试",
+  "suggestion": "请让主 agent 透传运行时环境变量构造出的 runtime_api_context 后再试",
   "debug_env": {
     "runtime_api_context": null,
     "runtime_system_language": "en-US"

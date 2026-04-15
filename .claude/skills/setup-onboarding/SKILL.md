@@ -21,8 +21,6 @@ user-invocable: false
 
 - `[SYSTEM: INIT_OPEN_PANEL]`
   首次打开面板的系统事件
-- `[TicketSystem: {...}]`
-  来自环境变量的 Ticket 运行时上下文，包含接口请求所需 token、租户、时区和 baseUrl
 - `[Mode: "onboarding" | "self_onboarding" | "normal"]`
   显式模式
 - `[SystemLanguage: "<locale>"]`
@@ -35,23 +33,28 @@ user-invocable: false
   当前期望继续的步骤
 - `[ActiveDepartment: {...}]`
   已确定的部门上下文
+- `TICKETS_BASE_URL` / `TICKETS_TOKEN` / `TICKETS_TIMEZONE` / `TENANT_ID`
+  运行时 Ticket API 上下文
+- `SYSTEM_LANGUAGE` / `MODE` / `CONTEXT`
+  运行时语言、模式和补充上下文
 
 处理原则：
 
 - 外部上下文优先于主 agent 自己推断
 - 如果外部给了 `[SYSTEM: INIT_OPEN_PANEL]`，第一条只返回欢迎语；欢迎语只由 `Mode` 和 `SystemLanguage` 决定
-- 如果外部给了 `TicketSystem`，就把它当作运行时环境变量上下文使用；请求接口所需 token 只从这里拿，不向用户索取
+- 访问 Ticket API 时，优先使用运行时环境变量 `TICKETS_*`
+- 不要要求消息里出现任何旧版 API 上下文前缀，也不要依赖这类前缀
 - 如果外部已经给了缺失项，不要再做一轮“系统里还缺什么”的无意义确认
 - 如果外部已经给了当前步骤，就从该步骤直接续接
-- 如果外部给了 `SystemLanguage`，它优先决定系统主动开场和系统提示的语言
+- 如果外部给了 `SYSTEM_LANGUAGE` 或 `SystemLanguage`，它优先决定系统主动开场和系统提示的语言
 
 ## 语言策略
 
 这部分参考旧版 Java 的 `systemLanguage` 约定：
 
-- `SystemLanguage` 主要用于系统主动消息，例如欢迎语、空状态、断点恢复首句
+- `SYSTEM_LANGUAGE` 或 `SystemLanguage` 主要用于系统主动消息，例如欢迎语、空状态、断点恢复首句
 - 用户主动发消息后，后续回复优先跟随用户当前使用的语言
-- 如果用户语言不明显，就回退到 `SystemLanguage`
+- 如果用户语言不明显，就回退到 `SYSTEM_LANGUAGE` 或 `SystemLanguage`
 - 如果当前租户是日本客户，推荐候选部门名仍可保留日文原文
 
 推荐映射：
@@ -62,7 +65,7 @@ user-invocable: false
 
 推荐做法：
 
-- 首次自动弹窗时，用 `SystemLanguage` 生成欢迎语
+- 首次自动弹窗时，用 `SYSTEM_LANGUAGE` 或 `SystemLanguage` 生成欢迎语
 - 用户输入“我要创建部门 AAC”这种中文请求后，后续用中文继续
 - 用户如果改成日语提问，后续自然切到日语
 

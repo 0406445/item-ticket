@@ -22,17 +22,17 @@ disable-model-invocation: true
 ## 认证配置
 
 执行时只允许使用输入里提供的 `runtime_api_context`。
-`runtime_api_context` 必须来自环境变量注入的 `[TicketSystem: {...}]`。
+`runtime_api_context` 应由调用方根据运行时环境变量构造后传入。
 禁止把 `.claude/api-config.json` 或其他本地文件当作认证兜底。
 
-`runtime_api_context` 通常来自环境变量注入的 `[TicketSystem: {...}]`，结构至少包含：
+`runtime_api_context` 通常由以下环境变量映射而来，结构至少包含：
 
 ```json
 {
-  "baseUrl": "<from TicketSystem env>",
-  "x-tickets-token": "<token from TicketSystem env>",
-  "x-tickets-timezone": "<timezone from TicketSystem env>",
-  "x-tenant-id": "<tenant id from TicketSystem env>"
+  "baseUrl": "<from TICKETS_BASE_URL>",
+  "x-tickets-token": "<from TICKETS_TOKEN>",
+  "x-tickets-timezone": "<from TICKETS_TIMEZONE>",
+  "x-tenant-id": "<from TENANT_ID>"
 }
 ```
 
@@ -72,7 +72,7 @@ disable-model-invocation: true
 - `runtime_api_context.x-tenant-id`
 
 验证四个必填字段都存在且非空：`baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`。
-`x-tickets-token` 只能从 `runtime_api_context` 读取；它本质上来自环境变量 `TicketSystem`。
+`x-tickets-token` 只能从 `runtime_api_context` 读取；它本质上来自运行时环境变量 `TICKETS_TOKEN`。
 
 ### 3. 构造 curl 命令
 
