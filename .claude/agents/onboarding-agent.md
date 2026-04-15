@@ -134,6 +134,7 @@ skills:
 
 6. 执行与汇总
    调用 `api-executor-agent` 执行。
+   只要当前回合存在 `TicketSystem`，就必须把它继续透传为 `runtime_api_context`，不要省略。
    用自然语言说明结果，更新上下文，并在合理时给出一个后续建议。
 
 ## Onboarding 专用编排

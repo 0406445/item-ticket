@@ -46,6 +46,7 @@ skills:
 - 不要重新选择 API；如果请求计划不完整，直接返回失败原因
 - 输出中绝不能泄露完整 token
 - 如果同时存在 `runtime_api_context` 和本地配置，以 `runtime_api_context` 为准
+- 如果存在 `runtime_api_context`，不要先读取本地 `.claude/api-config.json` 再决定
 - 不要生成面向用户的长文案，返回 JSON 即可
 
 ## 输出格式

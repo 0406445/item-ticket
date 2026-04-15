@@ -21,7 +21,23 @@ disable-model-invocation: true
 
 ## 认证配置
 
-所有配置从 `.claude/api-config.json` 读取：
+优先级如下：
+
+1. 如果输入里提供了 `runtime_api_context`，必须优先使用它
+2. 只有没有 `runtime_api_context` 时，才读取 `.claude/api-config.json`
+
+`runtime_api_context` 结构：
+
+```json
+{
+  "baseUrl": "https://unisticket-staging.item.com/api/item-tickets",
+  "x-tickets-token": "runtime-token",
+  "x-tickets-timezone": "Asia/Shanghai",
+  "x-tenant-id": "1"
+}
+```
+
+本地调试配置文件格式：
 
 ```json
 {
@@ -32,11 +48,22 @@ disable-model-invocation: true
 }
 ```
 
-如果配置文件不存在或缺少任何字段，必须停止执行并把错误交回主 agent。
+如果两者都不可用，或缺少任一必填字段，必须停止执行并把错误交回主 agent。
 
 ## 执行流程
 
 ### 1. 读取认证配置
+
+如果存在 `runtime_api_context`：
+
+- 直接使用 `runtime_api_context.baseUrl`
+- 直接使用 `runtime_api_context.x-tickets-token`
+- 直接使用 `runtime_api_context.x-tickets-timezone`
+- 直接使用 `runtime_api_context.x-tenant-id`
+- 不要先读 `.claude/api-config.json`
+- 即使本地文件存在，也不要覆盖运行时传入值
+
+如果不存在 `runtime_api_context`，再读取：
 
 ```bash
 cat .claude/api-config.json
@@ -46,11 +73,11 @@ cat .claude/api-config.json
 
 ### 2. 构造 curl 命令
 
-**【强制】baseUrl 必须从 `.claude/api-config.json` 的 `baseUrl` 字段读取，禁止硬编码、猜测或使用任何其他地址。**
+**【强制】baseUrl 必须从“当前生效配置”读取。当前生效配置优先是 `runtime_api_context`，其次才是 `.claude/api-config.json`。**
 
 - 禁止使用 localhost、127.0.0.1 或任何非配置文件中的地址
-- 索引中的 path 不带前缀，执行时必须拼接成 `{配置中的 baseUrl} + path`
-- 如果配置文件中没有 `baseUrl` 字段，停止执行并报错
+- 索引中的 path 不带前缀，执行时必须拼接成 `{当前生效的 baseUrl} + path`
+- 如果当前生效配置中没有 `baseUrl` 字段，停止执行并报错
 
 必须包含的固定请求头：
 - `accept: application/json, text/plain, */*`
@@ -60,10 +87,10 @@ cat .claude/api-config.json
 - `referer: https://unisticket-staging.item.com/`
 - `user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36`
 
-认证头从配置文件填充：
-- `x-tickets-token: {从配置读取}`
-- `x-tickets-timezone: {从配置读取}`
-- `x-tenant-id: {从配置读取}`
+认证头从当前生效配置填充：
+- `x-tickets-token: {从当前生效配置读取}`
+- `x-tickets-timezone: {从当前生效配置读取}`
+- `x-tenant-id: {从当前生效配置读取}`
 
 curl 规则：
 - 加 `-s` 静默模式
@@ -130,4 +157,5 @@ curl 规则：
 - 写操作应由主 agent 先确认；如果调用方没确认，执行子 agent 应拒绝继续
 - curl 输出可能很长，只返回关键字段
 - 敏感信息不要原样回传，用 `***` 遮蔽
+- 如果输入同时给了 `runtime_api_context` 和本地 `.claude/api-config.json`，以 `runtime_api_context` 为准，不要自行比较或回退
 - 这个 skill 负责执行约定，不负责业务解释或用户话术
