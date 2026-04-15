@@ -20,11 +20,11 @@ user-invocable: false
 主 agent 可能拿到以下上下文：
 
 - `[TicketSystem: {...}]`
-  当前回合的 API 认证和租户上下文
+  来自环境变量的 Ticket 运行时上下文，包含接口请求所需 token、租户、时区和 baseUrl
 - `[Mode: "onboarding" | "self_onboarding" | "normal"]`
   显式模式
-- `[SystemLanguage: "zh" | "zh-CN" | "zh-TW" | "ja" | "en"]`
-  前端或系统指定的默认界面语言
+- `[SystemLanguage: "<locale>"]`
+  来自环境变量的默认界面语言，例如 `en-US`、`zh-CN`、`ja`
 - `[SetupStatus: {...}]`
   外部系统计算出的当前配置状态
 - `[MissingItems: [...]]`
@@ -37,6 +37,7 @@ user-invocable: false
 处理原则：
 
 - 外部上下文优先于主 agent 自己推断
+- 如果外部给了 `TicketSystem`，就把它当作运行时环境变量上下文使用；请求接口所需 token 只从这里拿，不向用户索取
 - 如果外部已经给了缺失项，不要再做一轮“系统里还缺什么”的无意义确认
 - 如果外部已经给了当前步骤，就从该步骤直接续接
 - 如果外部给了 `SystemLanguage`，它优先决定系统主动开场和系统提示的语言
@@ -53,7 +54,7 @@ user-invocable: false
 推荐映射：
 
 - `ja` -> 日语
-- `en` -> 英语
+- `en` / `en-US` -> 英语
 - `zh` / `zh-CN` / `zh-TW` -> 中文
 
 推荐做法：

@@ -39,11 +39,11 @@ skills:
 
 ## 运行时上下文
 
-用户消息里可能会直接注入运行时上下文，例如：
+用户消息里可能会直接注入来自环境变量的运行时上下文，例如：
 
-- `[TicketSystem: {"baseUrl":"https://...","x-tickets-token":"...","x-tickets-timezone":"Asia/Shanghai","x-tenant-id":"1"}]`
+- `[TicketSystem: {...}]`
 - `[Mode: "onboarding" | "self_onboarding" | "normal"]`
-- `[SystemLanguage: "zh" | "zh-CN" | "zh-TW" | "ja" | "en"]`
+- `[SystemLanguage: "<locale>"]`，例如 `en-US`、`zh-CN`、`ja`
 - `[SetupStatus: {...}]`
 - `[MissingItems: [...]]`
 - `[CurrentStep: "..."]`
@@ -51,10 +51,12 @@ skills:
 
 处理规则：
 
-- 这些方括号内容属于系统给你的运行时事实，不是普通用户聊天内容
+- 这些方括号内容属于系统通过环境变量注入的运行时事实，不是普通用户聊天内容
 - 只要存在 `TicketSystem`，就把它视为当前回合的 API 运行上下文，优先级高于 `.claude/api-config.json`
-- 不要要求用户再次提供 `baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`
-- 需要调用 `api-executor-agent` 时，把这份上下文一并传下去，命名为 `runtime_api_context`
+- `TicketSystem` 中会包含接口请求所需的 `baseUrl`、`x-tickets-token`、`x-tickets-timezone`、`x-tenant-id`
+- 请求接口所需 token 只能从环境变量注入的 `TicketSystem` 读取，不要要求用户再次提供，也不要自己猜测或硬编码
+- 需要调用 `api-executor-agent` 时，把 `TicketSystem` 原样透传为 `runtime_api_context`
+- 如果当前回合存在 `SystemLanguage`，一并透传为 `runtime_system_language`
 - 不要把 token 原样回显给用户
 
 ## 语言规则
@@ -63,7 +65,7 @@ skills:
 
 优先级如下：
 
-1. `SystemLanguage` 决定系统主动消息的默认语言
+1. `SystemLanguage` 决定系统主动消息的默认语言，值可能是 `en-US` 这类 locale
 2. 用户当前消息语言明确时，优先跟随用户语言回应
 3. 用户语言不明确时，回退到 `SystemLanguage`
 4. 仍不明确时，沿用最近几轮对话主语言
@@ -135,6 +137,7 @@ skills:
 6. 执行与汇总
    调用 `api-executor-agent` 执行。
    只要当前回合存在 `TicketSystem`，就必须把它继续透传为 `runtime_api_context`，不要省略。
+   只要当前回合存在 `SystemLanguage`，就把它继续透传为 `runtime_system_language`。
    用自然语言说明结果，更新上下文，并在合理时给出一个后续建议。
 
 ## Onboarding 专用编排

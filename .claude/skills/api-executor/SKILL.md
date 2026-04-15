@@ -26,14 +26,22 @@ disable-model-invocation: true
 1. 如果输入里提供了 `runtime_api_context`，必须优先使用它
 2. 只有没有 `runtime_api_context` 时，才读取 `.claude/api-config.json`
 
-`runtime_api_context` 结构：
+`runtime_api_context` 通常来自环境变量注入的 `[TicketSystem: {...}]`，结构至少包含：
 
 ```json
 {
-  "baseUrl": "https://unisticket-staging.item.com/api/item-tickets",
-  "x-tickets-token": "runtime-token",
-  "x-tickets-timezone": "Asia/Shanghai",
-  "x-tenant-id": "1"
+  "baseUrl": "<from TicketSystem env>",
+  "x-tickets-token": "<token from TicketSystem env>",
+  "x-tickets-timezone": "<timezone from TicketSystem env>",
+  "x-tenant-id": "<tenant id from TicketSystem env>"
+}
+```
+
+也可能额外收到：
+
+```json
+{
+  "runtime_system_language": "en-US"
 }
 ```
 
@@ -60,6 +68,7 @@ disable-model-invocation: true
 - 直接使用 `runtime_api_context.x-tickets-token`
 - 直接使用 `runtime_api_context.x-tickets-timezone`
 - 直接使用 `runtime_api_context.x-tenant-id`
+- `x-tickets-token` 只能从 `runtime_api_context` 读取；它本质上来自环境变量 `TicketSystem`
 - 不要先读 `.claude/api-config.json`
 - 即使本地文件存在，也不要覆盖运行时传入值
 
@@ -81,7 +90,7 @@ cat .claude/api-config.json
 
 必须包含的固定请求头：
 - `accept: application/json, text/plain, */*`
-- `accept-language: en-US`
+- `accept-language: {runtime_system_language；若未提供则默认 en-US}`
 - `content-type: application/json`（POST/PUT/PATCH 请求时）
 - `origin: https://unisticket-staging.item.com`
 - `referer: https://unisticket-staging.item.com/`

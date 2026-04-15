@@ -28,6 +28,8 @@ skills:
   - `x-tickets-token`
   - `x-tickets-timezone`
   - `x-tenant-id`
+- `runtime_system_language`
+  - 例如 `en-US`、`zh-CN`、`ja`
 
 ## 你的职责
 
@@ -44,6 +46,7 @@ skills:
 - 对 `POST`、`PUT`、`PATCH`、`DELETE` 这类写操作，如果 `confirmed != true`，直接拒绝执行
 - 不要询问用户问题，也不要把问题抛回用户
 - 不要重新选择 API；如果请求计划不完整，直接返回失败原因
+- 如果存在 `runtime_api_context`，其中的 `x-tickets-token` 视为来自环境变量 `TicketSystem`，请求时必须直接使用它
 - 输出中绝不能泄露完整 token
 - 如果同时存在 `runtime_api_context` 和本地配置，以 `runtime_api_context` 为准
 - 如果存在 `runtime_api_context`，不要先读取本地 `.claude/api-config.json` 再决定
