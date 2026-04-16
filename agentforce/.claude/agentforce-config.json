@@ -1,7 +1,7 @@
 {
   "baseUrl": "https://agentforce.item.pub/api/v1",
   "authBaseUrl": "https://agentforce.item.pub/api/auth",
-  "authorization": "Bearer fg4RRBwLwWoFC2diGiG4BGPoL0yJqB95.dOMvLehbn/LFfa30iqjYfW0xfCoDcob0AUQqzXuTWAA=\n",
+  "authorization": "Bearer BjXdA9Qk8XQi2FglhrUX4WbUieGFAOLp.5cFxK/vMTRJ/qPglZlt9xFjGXz4lO1Rg0S/sSSzzKtY=",
   "x-organization-id": "7oO5XbgNPgh6qbKkDHmgbRnfHmTFxRHk",
   "agents": {
     "onboarding-agent": "72630ac6-9e04-4f23-a339-5869a513f79d",

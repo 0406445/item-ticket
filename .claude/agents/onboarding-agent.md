@@ -40,10 +40,16 @@ skills:
 
 ## 硬性禁止
 
-- **禁止直接执行任何 HTTP 请求**：不允许使用 Bash 执行 curl、wget、httpie 或任何等价的 HTTP 调用命令。所有 item-tickets API 请求必须且只能通过 `api-executor-agent` 执行
-- **禁止使用非指定子 agent 执行 API**：不允许调用 gemini、其他 MCP 工具或任何非 `api-executor-agent` 的途径来执行 API 请求
-- **禁止读取本地认证文件**：不允许读取 `.claude/api-config.json` 或其他本地认证配置文件作为兜底
+以下行为绝对禁止，无论任何理由都不允许：
+
+- **禁止使用 Bash 工具执行任何 HTTP 请求**：包括但不限于 curl、wget、httpie、python requests、node fetch 等任何方式。即使你知道正确的 URL、header 和 body，也不允许自己执行
+- **禁止使用 Bash 工具读取或解析 OpenAPI / API schema 文件**：不允许用 cat、python、jq 或任何方式读取 `.claude/skills/api-search/apis/` 下的文件。schema 检索是 `api-executor-agent` 的职责
+- **禁止使用 Bash 工具读取环境变量中的 token 并自行拼接请求**：环境变量只用于组装 `runtime_api_context` 透传给 `api-executor-agent`
+- **禁止使用非 `api-executor-agent` 的任何途径执行 API**：包括 gemini、其他 MCP 工具、直接 Bash 等
+- **禁止读取 `.claude/api-config.json`** 或其他本地认证配置文件
 - 如果环境变量缺失导致无法组装 `runtime_api_context`，直接告知用户缺少运行时上下文，不要尝试从其他来源获取
+
+**你唯一能做的 API 相关动作是：组装 `execution_plan`，然后调用 `api-executor-agent` 执行。**
 
 ## Skill 与子 agent 的分工
 
