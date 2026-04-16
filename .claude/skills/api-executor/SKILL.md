@@ -1,23 +1,39 @@
 ---
 name: api-executor
-description: "内部 API 执行技能，用于读取认证配置并执行已确认的 item-tickets 请求。"
+description: "内部 API 执行技能，用于接收主 agent 透传的运行时 API 上下文并执行已确认的 item-tickets 请求。"
 user-invocable: false
 disable-model-invocation: true
 ---
 
 # API Executor
 
-用于根据已确认的 `request_plan` 执行 item-tickets 请求。
+用于根据已确认的 `execution_plan` 或单步 `request_plan` 执行 item-tickets 请求。
 这是内部技能，只供执行型子 agent 使用，不直接面向用户。
 
 ## 前置条件
 
-调用前应当已经拿到结构化的 `request_plan`，至少包含：
-- `method`
-- `path`
-- `path_params`
-- `query_params`
-- `body`
+调用前应当已经拿到结构化的执行输入，优先使用：
+
+- `execution_plan`
+  - `goal`
+  - `confirmed`
+  - `expectation`
+  - `steps[]`
+
+每个 `step` 至少包含：
+
+- `step_id`
+- `purpose`
+- `request_plan`
+  - `method`
+  - `path`
+  - `path_params`
+  - `query_params`
+  - `body`
+- `extract`
+- `checks`
+
+兼容旧链路时，也允许直接收到单步 `request_plan`。这时你应先把它规范化成仅含一个 step 的 `execution_plan` 再执行。
 
 ## 认证配置
 
@@ -53,11 +69,13 @@ disable-model-invocation: true
 
 先校验输入是否完整：
 
-- 必须存在 `request_plan`
+- 必须存在 `execution_plan.steps` 或 `request_plan`
 - 必须存在 `runtime_api_context`
-- `request_plan` 缺失时，直接返回 `invalid_request_plan`
+- 两者都缺失时，直接返回 `invalid_request_plan`
 - `runtime_api_context` 缺失时，直接返回 `missing_runtime_api_context`
 - 不要从自然语言自行猜测请求计划
+- 如果只收到自然语言描述但没有结构化计划，直接失败
+- 如果收到 `execution_plan`，逐 step 执行；不要自己改写或合并步骤语义
 - 不要读取 `.claude/api-config.json`
 - 不要调用 `Read` 打开 `.claude/api-config.json`
 - 不要使用 `cat .claude/api-config.json`、`less .claude/api-config.json` 或任何等价方式读取本地认证文件
@@ -104,7 +122,11 @@ curl 规则：
 
 ### 4. 执行请求
 
-通过 shell 执行构造好的 curl 命令。
+按 `execution_plan.steps` 的顺序逐步执行 shell 请求。
+
+- 每个 step 都要单独记录请求与响应
+- 如果某一步失败，保留已执行步骤的 trace，再决定返回 `failed` 或 `partial`
+- 不要跳步，也不要因为“看起来像常识”而省略 lookup / 当前用户 / 统计步骤
 
 ### 5. 响应校验
 
@@ -129,6 +151,11 @@ curl 规则：
 #### ③ 响应结构校验
 如果有预期的 response schema，检查返回的 JSON 是否包含预期的关键字段。
 
+#### ④ step 提取与校验
+- 按 `extract` 规则从每个 step 的响应中提取字段
+- 按 `checks` 逐项校验，并在结果里返回 `passed: true/false`
+- 如果关键结论缺少证据路径或提取失败，不要自己补一个“合理值”
+
 ### 6. 返回结果
 
 优先返回结构化 JSON：
@@ -138,8 +165,60 @@ curl 规则：
   "status": "success",
   "http_status": 201,
   "business_success": true,
-  "data": { ... },
+  "request_echo": {
+    "execution_mode": "single_step",
+    "step_count": 1,
+    "steps": [
+      {
+        "step_id": "count_staff",
+        "method": "POST",
+        "path": "/v1/staff/staff/page"
+      }
+    ]
+  },
   "summary": "请求执行成功",
+  "data": { ... },
+  "evidence": {
+    "staff_total": {
+      "step_id": "count_staff",
+      "path": "response.body.data.total",
+      "value": 1
+    }
+  },
+  "trace": [
+    {
+      "step_id": "count_staff",
+      "purpose": "按部门统计成员数量",
+      "status": "success",
+      "request": {
+        "method": "POST",
+        "path": "/v1/staff/staff/page",
+        "path_params": {},
+        "query_params": {},
+        "body": {},
+        "headers": {
+          "accept-language": "zh-CN",
+          "x-tickets-token": "***",
+          "x-tickets-timezone": "Asia/Shanghai",
+          "x-tenant-id": "1"
+        }
+      },
+      "response": {
+        "http_status": 200,
+        "body": {}
+      },
+      "extracted": {
+        "staff_total": 1
+      },
+      "checks": [
+        {
+          "name": "staff_total_present",
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "warnings": [],
   "debug_env": null
 }
 ```
@@ -153,10 +232,11 @@ curl 规则：
   "business_success": false,
   "error_message": "参数错误: name 字段不能为空",
   "suggestion": "请提供部门名称后重试",
+  "trace": [],
   "debug_env": {
     "runtime_api_context": {
       "baseUrl": "https://...",
-      "x-tickets-token": "token-from-env",
+      "x-tickets-token": "***",
       "x-tickets-timezone": "Asia/Shanghai",
       "x-tenant-id": "1"
     },
@@ -173,13 +253,21 @@ curl 规则：
 - 不要自己构造不存在的 env 值
 - 这个字段就是给调试透传问题看的
 
+新增字段要求：
+
+- `trace`：必须按执行顺序保留每一步的完整请求 body 和原始响应 body；如果响应过大，可截断，但必须显式标记 `truncated: true`
+- `evidence`：所有会被上游拿去直接说给用户的数字、ID、名称，必须有对应证据路径
+- `summary`：只能复述 `trace` / `evidence` 已经证明的事实，不能新增任何未经证据支持的数字或判断
+- 如果请求执行成功但关键结论证据不足，返回 `status: "needs_confirmation"`，不要假装成功
+
 ## 注意事项
 
 - 写操作应由主 agent 先确认；如果调用方没确认，执行子 agent 应拒绝继续
-- curl 输出可能很长，只返回关键字段
+- curl 输出可能很长，但 `trace.request.body` 与 `trace.response.body` 不能省略
 - 敏感信息不要原样回传，用 `***` 遮蔽
 - 不要读取 `.claude/api-config.json`，即使它存在
 - 如果本地调试需要认证信息，也必须由调用方显式传入 `runtime_api_context`，不要自行读文件
 - 收到自然语言直输但缺少结构化 `request_plan` 时，直接失败，不要先读文件再判断
 - 失败时必须把当前收到的 env 上下文放进 `debug_env`
 - 这个 skill 负责执行约定，不负责业务解释或用户话术
+- 任何数字如果不能从响应里直接提取，就不要写进 `summary`、`data` 或 `evidence`
