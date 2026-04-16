@@ -39,4 +39,4 @@ user-invocable: false
 ## 兜底规则
 
 - 规则、状态、工作量、历史优先使用这里列出的固定 API
-- 如果请求涉及未列出的细粒度字段枚举或新策略类型，再调用 `findapiagent`
+- 如果请求涉及未列出的细粒度字段枚举或新策略类型，再调用 `api-executor-agent`（schema_lookup 模式）

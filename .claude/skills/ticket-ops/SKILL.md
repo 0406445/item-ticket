@@ -33,7 +33,7 @@ user-invocable: false
 
 - 用户问“多少个”“总数”“成员数”“数量”时，主 agent 必须在 `extract` 里明确写出优先读取的统计字段
 - 如果 page 接口同时返回 `total` 与列表字段，主 agent 应要求执行 agent 一并带回，方便上游验收
-- 如果过滤条件存在多个近义字段，主 agent 必须先根据 skill、已知 schema 或 `findapiagent` 明确字段后再执行，不能把字段选择留给执行 agent 临场判断
+- 如果过滤条件存在多个近义字段，主 agent 必须先根据 skill、已知 schema 或 `api-executor-agent`（schema_lookup 模式）明确字段后再执行，不能把字段选择留给执行 agent 临场判断
 - 执行结果里如果缺少可追溯证据路径，主 agent 只能回复“暂时无法确认”，不能输出精确数字
 
 ## 访问边界
@@ -112,4 +112,4 @@ user-invocable: false
 
 - 回复、备注、状态流转、分派、详情、时间线优先使用这里列出的主 API
 - 如果只是缺人员、部门、Topic、优先级 ID，优先用这里列出的 page / options 接口解析
-- 只有遇到宏、升级、提醒、打印、平行工单等低频能力时，再调用 `findapiagent`
+- 只有遇到宏、升级、提醒、打印、平行工单等低频能力时，再调用 `api-executor-agent`（schema_lookup 模式）

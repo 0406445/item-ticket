@@ -42,4 +42,4 @@ user-invocable: false
 ## 兜底规则
 
 - 规则组、规则详情、可用筛选字段优先使用这里列出的固定 API
-- 如果某个字段的枚举、路径或附加 lookup 仍不明确，再调用 `findapiagent`
+- 如果某个字段的枚举、路径或附加 lookup 仍不明确，再调用 `api-executor-agent`（schema_lookup 模式）

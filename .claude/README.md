@@ -10,12 +10,8 @@
 
 ## 2. 执行层
 
-- `agents/findapiagent.md`
-  通用 API 检索子 agent，只负责从索引和 OpenAPI 中找候选接口
-- `agents/api-validator.md`
-  通用请求规划子 agent，只负责校验参数、补齐缺项、输出最小执行计划
 - `agents/api-executor-agent.md`
-  通用请求执行子 agent，只负责读取认证配置并执行已确认的请求
+  通用 API 执行子 agent，负责 schema 检索、参数校验、自动 lookup 和 HTTP 执行
 
 这一层全部返回结构化结果，不直接承担用户对话。
 

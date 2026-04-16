@@ -77,7 +77,7 @@ user-invocable: false
 
 ## 常用固定 lookup
 
-- 当前登录员工由主 agent 通过 `GET /v1/staff/auth/current` 获取，不走 `findapiagent`
+- 当前登录员工由主 agent 通过 `GET /v1/staff/auth/current` 获取，不需要额外检索
 - 目标员工优先用 `POST /v1/staff/staff/page` 解析
 - 目标部门优先用 `POST /v1/staff/departments/page` 解析
 - 目标角色优先用 `POST /v1/staff/roles/page` 解析
@@ -93,4 +93,4 @@ user-invocable: false
 
 - skill 已列出的部门、员工、Topic、配置主 API 优先直接使用
 - 如果只是缺角色、部门、SLA、员工 ID，优先用这里列出的 page 接口解析
-- 只有配置项、字段枚举或低频系统能力未列出时，才调用 `findapiagent`
+- 只有配置项、字段枚举或低频系统能力未列出时，才调用 `api-executor-agent`（schema_lookup 模式）

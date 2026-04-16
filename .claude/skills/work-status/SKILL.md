@@ -63,9 +63,9 @@ user-invocable: false
 
 - 用户没给时间范围时，个人状态默认今天，趋势默认最近 7 天
 - 用户范围超权时，主 agent 应收缩到其可见范围，而不是直接失败
-- “我的”“我自己”“当前登录员工”的范围优先由主 agent 通过 `GET /v1/staff/auth/current` 固化，不走 `findapiagent`
+- “我的””我自己””当前登录员工”的范围优先由主 agent 通过 `GET /v1/staff/auth/current` 固化，不需要额外检索
 
 ## 兜底规则
 
 - 个人状态、团队状态、工作量、仪表盘统计优先使用这里列出的报表 API
-- 如果只是缺某个筛选条件枚举或更细的统计维度，再调用 `findapiagent`
+- 如果只是缺某个筛选条件枚举或更细的统计维度，再调用 `api-executor-agent`（schema_lookup 模式）

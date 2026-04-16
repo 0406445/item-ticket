@@ -75,7 +75,7 @@ user-invocable: false
 - 团队名称优先走团队分页查询
 - 角色名称优先走角色分页查询
 - “我的团队”“我的部门”默认落到当前用户部门
-- “我”“当前登录员工”由主 agent 通过固定接口 `GET /v1/staff/auth/current` 解析，不走 `findapiagent`
+- “我””当前登录员工”由主 agent 通过固定接口 `GET /v1/staff/auth/current` 解析，不需要额外检索
 
 ## 复合操作提示
 
@@ -85,9 +85,9 @@ user-invocable: false
 
 ## 兜底规则
 
-- 如果 skill 中的主 API 已能覆盖动作，不调用 `findapiagent`
+- 如果 skill 中的主 API 已能覆盖动作，不需要额外检索
 - 如果只是缺部门/团队/角色 ID，优先用这里列出的 page 接口解析
-- 只有以下情况才调用 `findapiagent`：
+- 只有以下情况才调用 `api-executor-agent`（schema_lookup 模式）：
   - 需要查字段枚举或默认值
   - 创建接口是否支持某字段不明确
   - 新业务不在本 playbook 内

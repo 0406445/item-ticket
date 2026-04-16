@@ -74,4 +74,4 @@ user-invocable: false
 
 - skill 已列出的部门、邮箱、AI 绑定接口优先直接使用
 - 如果只是缺部门 ID、员工 ID、邮箱配置 ID、assistant agent 代码或 ID，优先用这里的 lookup API 解析
-- 如果需要查更细的字段枚举、配置命名空间或未列出的部门周边能力，再调用 `findapiagent`
+- 如果需要查更细的字段枚举、配置命名空间或未列出的部门周边能力，再调用 `api-executor-agent`（schema_lookup 模式）
