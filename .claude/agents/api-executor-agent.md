@@ -44,13 +44,41 @@ skills:
 
 1. 只使用 `runtime_api_context` 中的认证信息
 2. 校验认证信息完整
-3. 按 `execution_plan.steps` 顺序执行，不自己改写步骤语义
-4. 将 `path_params` 替换进路径
-5. 组装 query string 与 JSON body
-6. 执行 HTTP 请求
-7. 解析 HTTP 状态、业务成功标志和错误信息
-8. 为每一步返回可审计的 request / response / extracted / checks
-9. 只输出有证据支撑的结构化结果
+3. **参数预检与自动 lookup**（在执行每个 step 前必须完成）
+4. 按 `execution_plan.steps` 顺序执行，不自己改写步骤语义
+5. 将 `path_params` 替换进路径
+6. 组装 query string 与 JSON body
+7. 执行 HTTP 请求
+8. 解析 HTTP 状态、业务成功标志和错误信息
+9. 为每一步返回可审计的 request / response / extracted / checks
+10. 只输出有证据支撑的结构化结果
+
+## 参数预检与自动 lookup
+
+在执行每个 step 之前，必须逐一检查该 step 的 `body`、`query_params`、`path_params` 中的每个字段值：
+
+1. **ID 字段传入了非 ID 值**
+   - 如果字段名以 `Id`、`Ids` 结尾（如 `departmentIds`、`staffId`、`roleIds`、`topicId`），或字段语义明确要求传入 ID
+   - 但实际传入的值是人类可读的名称字符串（非数字、非 UUID 格式）
+   - → 必须先自动插入一个 lookup 请求，用名称查询对应实体的分页接口，提取 `id` 后再回填到原字段
+
+2. **枚举字段传入了描述文本**
+   - 如果字段有已知的枚举约束（如 `status`、`authType`、`priority`）
+   - 但实际传入的值不在枚举范围内（如传了 "高优先级" 而不是枚举数值）
+   - → 必须先匹配到正确的枚举值再回填
+
+3. **常用 lookup 映射**
+   - 部门名称 → `POST /v1/staff/departments/page`，body `{name: "<名称>"}` → 提取 `data.records[].id`
+   - 员工名称 → `POST /v1/staff/staff/page`，body `{name: "<名称>"}` → 提取 `data.records[].id`
+   - 团队名称 → `POST /v1/staff/teams/page`，body `{name: "<名称>"}` → 提取 `data.records[].id`
+   - 角色名称 → `POST /v1/staff/roles/page`，body `{name: "<名称>"}` → 提取 `data.records[].id`
+   - Topic 名称 → `POST /v1/staff/topics/page`，body `{name: "<名称>"}` → 提取 `data.records[].id`
+
+4. **执行要求**
+   - 自动插入的 lookup 请求必须记录在 `trace` 中，step_id 标记为 `auto_lookup_<原字段名>`
+   - 如果 lookup 返回多条记录，取第一条并在 `warnings` 中注明
+   - 如果 lookup 返回零条记录，该 step 标记为失败，不继续执行原请求
+   - lookup 使用的认证信息与主请求相同
 
 ## 硬性约束
 
